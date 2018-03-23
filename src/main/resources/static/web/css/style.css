@@ -1,0 +1,86 @@
+#basicTable {
+    padding: 20px;
+    border: 1px;
+    padding: 0;
+    border-collapse: collapse;
+    width: 100%;
+}
+
+#basicTable td, th {
+    border: 1px;
+    border-style: solid;
+    border-color: #000;
+    padding: 3px;
+    text-align: center;
+    height: 30px;
+    width: 9.09%;
+}
+
+#basicTable th {
+    border: none;
+}
+
+#gamesList {
+    padding: 20px;
+    border: 1px;
+    padding: 0;
+    border-collapse: collapse;
+    width: 70%;
+    margin: 0 auto;
+    margin-bottom: 15px;
+}
+
+#gamesList td, th {
+    border: 1px;
+    border-style: solid;
+    border-color: #000;
+    padding: 6px;
+
+}
+
+#scoreBoard {
+    padding: 20px;
+    border: 1px;
+    padding: 0;
+    border-collapse: collapse;
+    width: 45%;
+    margin: 0 auto;
+    margin-top: 10px;
+    margin-bottom: 30px;
+}
+
+#scoreBoard td, th {
+    border: 1px;
+    border-style: solid;
+    border-color: #000;
+    padding: 6px;
+
+}
+
+.shipCell {
+    background-color: yellowgreen;
+}
+
+.salvoCell {
+    background-color: lightskyblue ;
+}
+
+.hitCell {
+    background-color: red;
+}
+
+#gamePlayerDetails {
+    padding: 20px;
+}
+
+.gridLabel {
+    text-align: center;
+}
+
+#gamePlayerDetails {
+    text-align: center;
+}
+
+.textCenter {
+    text-align: center;
+}
