@@ -1,6 +1,9 @@
 package beringar.salvo;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.springframework.data.repository.query.Param;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.persistence.*;
 import java.util.*;
@@ -15,6 +18,8 @@ public class Player {
     private long id;
 
     private String email;
+
+    private String password;
 
     @OneToMany(mappedBy="playerPlay", fetch=FetchType.EAGER)
     private List<GamePlayer> gamePlayers = new ArrayList<>();
@@ -48,8 +53,10 @@ public class Player {
 
     public Player() {}
 
-    public Player(String email) {
+    public Player(String email, String password) {
+
         this.email = email;
+        this.password = password;
     }
 
     public String toString() {
@@ -75,4 +82,13 @@ public class Player {
     public void setScores(List<Score> scores) {
         this.scores = scores;
     }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
 }

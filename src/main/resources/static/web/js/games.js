@@ -13,8 +13,11 @@ fetchJson('/api/games').then(function(json) {
     // do something getting JSON fails
 });
 
-function fetchJson(url, init) {
-    return fetch(url, init).then(function(response) {
+function fetchJson(url) {
+    return fetch(url, {
+        method: 'GET',
+            credentials: 'include'
+    }).then(function(response) {
         if (response.ok) {
             return response.json();
         }
