@@ -1,3 +1,17 @@
+#loginFailed {
+    display: none;
+    background-color: indianred;
+    color: white;
+    padding: 10px;
+}
+
+#loginSuccess, #logoutSuccess {
+    display: none;
+    background-color: forestgreen;
+    color: white;
+    padding: 10px;
+}
+
 #basicTable {
     padding: 20px;
     border: 1px;
@@ -25,7 +39,7 @@
     border: 1px;
     padding: 0;
     border-collapse: collapse;
-    width: 70%;
+    width: 85%;
     margin: 0 auto;
     margin-bottom: 15px;
 }
@@ -43,7 +57,7 @@
     border: 1px;
     padding: 0;
     border-collapse: collapse;
-    width: 45%;
+    width: 60%;
     margin: 0 auto;
     margin-top: 10px;
     margin-bottom: 30px;

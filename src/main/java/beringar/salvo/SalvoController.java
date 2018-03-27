@@ -1,9 +1,13 @@
 package beringar.salvo;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.data.repository.query.Param;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
 import java.util.stream.Collector;
@@ -34,7 +38,28 @@ public class SalvoController {
 
 
 
+
+
     @RequestMapping("/games")
+    public Map<String, Object> getAllGamesLogged(Authentication authentication) {
+
+        Map<String, Object> dto = new LinkedHashMap<String, Object>();
+        if(isGuest(authentication)){
+            System.out.println("Guest in !");
+            dto.put("player", "Guest");
+        } else {
+            System.out.println("User authenticaded !");
+            dto.put("player", loggedInToDTO(getLoggedPlayer(authentication)));
+        }
+
+        dto.put("games", getAllGames());
+        return dto;
+    }
+
+    private boolean isGuest(Authentication authentication) {
+        return authentication == null || authentication instanceof AnonymousAuthenticationToken;
+    }
+
     public List<Map> getAllGames() {
         return gameRepository
                 .findAll()
@@ -178,6 +203,40 @@ public class SalvoController {
                 .map(salvo -> SalvoToDTO(salvo))
                 .collect(Collectors.toList());
     }
+
+    private Player getLoggedPlayer(Authentication authentication) {
+        return playerRepository.findByEmail(authentication.getName());
+    }
+
+    private Map<String, Object> loggedInToDTO(Player player) {
+        Map<String, Object> dto = new LinkedHashMap<String, Object>();
+        dto.put("id", player.getId());
+        dto.put("name", player.getEmail());
+        return dto;
+    }
+
+    @RequestMapping(path = "/players", method = RequestMethod.POST)
+    public ResponseEntity<Map<String, Object>> createUser(@RequestParam String email, String password) {
+        if (email.isEmpty()) {
+            return new ResponseEntity<>(makeMap("error", "No name"), HttpStatus.FORBIDDEN);
+        }
+
+
+        Player player = playerRepository.findByEmail(email);
+        if (player != null) {
+            return new ResponseEntity<>(makeMap("error", "Username already exists"), HttpStatus.CONFLICT);
+        }
+        Player newPlayer = playerRepository.save(new Player(email, password));
+        return new ResponseEntity<>(makeMap("id", newPlayer.getEmail()), HttpStatus.CREATED);
+    }
+
+    private Map<String, Object> makeMap(String key, Object value) {
+        Map<String, Object> map = new HashMap<>();
+        map.put(key, value);
+        return map;
+    }
+
+
 
 
 
