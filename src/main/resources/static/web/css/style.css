@@ -1,11 +1,22 @@
-#loginFailed {
+#loginFailed, #errorSignup, #errorShips {
     display: none;
     background-color: indianred;
     color: white;
     padding: 10px;
 }
 
-#loginSuccess, #logoutSuccess {
+#signupSuccess {
+    display: none;
+    background-color: darkorange;
+    color: black;
+    padding: 10px;
+}
+
+#errorMsg{
+    display: none;
+}
+
+#loginSuccess, #logoutSuccess, #gameCreatedSuccess, #gameJoinedSuccess, #okShips {
     display: none;
     background-color: forestgreen;
     color: white;
@@ -97,4 +108,99 @@
 
 .textCenter {
     text-align: center;
+}
+
+/*SHIP PLACEMENT*/
+
+#grid1 {
+
+}
+
+.grid-stack-item-content {
+    color: #2c3e50;
+    background-color: #18bc9c;
+    opacity: 0.8;
+    border-radius: 10px;
+}
+
+.sidebar {
+    background: rgba(0, 255, 0, 0.1);
+    height: 150px;
+    padding: 25px 0;
+    text-align: center;
+}
+
+.salvoShot {
+    border: 2px dashed green;
+    text-align: center;
+    line-height: 45px;
+    z-index: 10;
+    background: rgba(0, 255, 0, 0.1);
+    cursor: default;
+    display: inline-block;
+}
+
+.salvoShot .grid-stack-item-content {
+    background: none;
+
+}
+
+.gridShips {
+    width: 451px;
+    height: 451px;
+    background-image: url(../img/gridback.jpg);
+    margin: 0 auto;
+    background-size: cover;
+
+
+}
+.title {
+    text-align: center;
+}
+
+
+.rotateIcon {
+    height: 15px;
+}
+
+.rotateButton {
+    border: none;
+    background: none;
+
+}
+
+/* DivTable.com */
+.divTable{
+    display: table;
+    width: 550px;
+    margin: 0 auto;
+}
+.divTableRow {
+    display: table-row;
+}
+.divTableHeading {
+    background-color: #EEE;
+    display: table-header-group;
+}
+.divTableCell, .divTableHead {
+    border: 1px solid #999999;
+    display: table-cell;
+    /*padding: 3px 10px;*/
+    width: 50px;
+    height: 50px;
+    line-height: 50px;
+    text-align: center;
+}
+.divTableHeading {
+    background-color: #EEE;
+    display: table-header-group;
+    font-weight: bold;
+}
+.divTableFoot {
+    background-color: #EEE;
+    display: table-footer-group;
+    font-weight: bold;
+}
+.divTableBody {
+    display: table-row-group;
 }

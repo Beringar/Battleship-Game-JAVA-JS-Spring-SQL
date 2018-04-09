@@ -28,6 +28,7 @@ public class GamePlayer {
     private Game gamePlay;
 
     @OneToMany(mappedBy="gamePlayer", fetch=FetchType.EAGER)
+    @Fetch(value = FetchMode.SUBSELECT)
     private List<Ship> ships = new ArrayList<>();
 
     @OneToMany(mappedBy="gamePlayer", fetch=FetchType.EAGER)

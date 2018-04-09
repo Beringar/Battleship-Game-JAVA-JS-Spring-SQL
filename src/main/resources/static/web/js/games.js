@@ -8,7 +8,8 @@ updateJson();
 $(function() {
     $('.submitbutton').click(function () {
         submitButton = $(this).attr('name')
-    })
+    });
+
 });
 
 $('#login-form').on('submit', function (event) {
@@ -21,7 +22,7 @@ $('#login-form').on('submit', function (event) {
             .done(function() {
                 console.log("login ok");
                 $('#loginSuccess').show( "slow" ).delay(2000).hide( "slow" );
-                $("#username").val("");
+                // $("#username").val("");
                 $("#password").val("");
                 updateJson();
 
@@ -34,10 +35,50 @@ $('#login-form').on('submit', function (event) {
                 // $('#loginFailed').hide( "slow" );
             })
             .always(function() {
-                console.log("login finished");
+
             });
 
     } else if (submitButton == "signup") {
+        $.post("/api/players",
+            { email: $("#username").val(),
+                password: $("#password").val() })
+            .done(function(data) {
+                console.log("signup ok");
+                console.log(data);
+                $('#signupSuccess').show( "slow" ).delay(2000).hide( "slow" );
+                $.post("/api/login",
+                    { name: $("#username").val(),
+                        pwd: $("#password").val() })
+                    .done(function() {
+                        console.log("login ok");
+                        $('#loginSuccess').show( "slow" ).delay(2500).hide( "slow" );
+                        $("#username").val("");
+                        $("#password").val("");
+                        updateJson();
+
+                    })
+                    .fail(function() {
+                        console.log("login failed");
+                        $('#loginFailed').show( "slow" ).delay(2000).hide( "slow" );
+                        $("#username").val("");
+                        $("#password").val("");
+                        // $('#loginFailed').hide( "slow" );
+                    })
+                    .always(function() {
+
+                    });
+            })
+            .fail(function(data) {
+                console.log("signup failed");
+                console.log(data);
+                // $("#username").val("");
+                $("#password").val("");
+                $('#errorSignup').text(data.responseJSON.error);
+                $('#errorSignup').show( "slow" ).delay(3000).hide( "slow" );
+            })
+            .always(function() {
+
+            });
 
 
     } else {
@@ -45,7 +86,7 @@ $('#login-form').on('submit', function (event) {
     }
 });
 
-    $('#logout-form').on('submit', function (event) {
+$('#logout-form').on('submit', function (event) {
         event.preventDefault();
         $.post("/api/logout")
             .done(function () {
@@ -57,11 +98,37 @@ $('#login-form').on('submit', function (event) {
                 console.log("logout fails");
             })
             .always(function () {
-                console.log("log out finished");
+
             });
     });
 
-    function fetchJson(url) {
+$('#createGame').on('submit', function (event) {
+    event.preventDefault();
+    $.post("/api/games")
+        .done(function (data) {
+            console.log(data);
+            console.log("game created");
+            gameViewUrl = "/web/game.html?gp=" + data.gpid;
+            $('#gameCreatedSuccess').show("slow").delay(2000).hide("slow");
+            setTimeout(
+                function()
+                {
+                    location.href = gameViewUrl;
+                }, 3000);
+        })
+        .fail(function (data) {
+            console.log("game creation failed");
+            $('#errorSignup').text(data.responseJSON.error);
+            $('#errorSignup').show( "slow" ).delay(4000).hide( "slow" );
+
+        })
+        .always(function () {
+
+        });
+});
+
+
+function fetchJson(url) {
         return fetch(url, {
             method: 'GET',
             credentials: 'include'
@@ -71,9 +138,9 @@ $('#login-form').on('submit', function (event) {
             }
             throw new Error(response.statusText);
         });
-    }
+}
 
-    function updateJson() {
+function updateJson() {
         fetchJson('/api/games').then(function (json) {
             // do something with the JSON
 
@@ -84,9 +151,9 @@ $('#login-form').on('submit', function (event) {
         }).catch(function (error) {
             // do something getting JSON fails
         });
-    }
+}
 
-    function updateView() {
+function updateView() {
         showGamesTable(gamesData);
         addScoresToPlayersArray(getPlayers(gamesData));
         showScoreBoard(playersArray);
@@ -101,70 +168,112 @@ $('#login-form').on('submit', function (event) {
             $('#logout-form').show();
 
         }
-    }
+}
 
-    function showGamesTable(gamesData) {
-        // var mytable = $('<table></table>').attr({id: "gamesTable", class: ""});
-        var table = "#gamesList";
+function showGamesTable(gamesData) {
+        // let mytable = $('<table></table>').attr({id: "gamesTable", class: ""});
+        let table = "#gamesList";
+        let gpid;
         $(table).empty();
-        $('<tr><th>Game ID</th><th>Created</th><th>Player 1</th><th>Player 2</th><th>Game State</th></tr>').attr({class: ["class1"].join(' ')}).appendTo(table);
-        for (var i = 0; i < gamesData.length; i++) {
+        $('<tr><th>Game ID</th><th>Created</th><th>Player 1</th><th>Player 2</th><th>Game Actions</th></tr>').attr({class: ["class1"].join(' ')}).appendTo(table);
+        for (let i = 0; i < gamesData.length; i++) {
 
-            var DateCreated = new Date(gamesData[i].created);
+            let isLoggedPlayer = false;
+
+            let DateCreated = new Date(gamesData[i].created);
             DateCreated = DateCreated.getMonth() + 1 + "/" + DateCreated.getDate() + " " + DateCreated.getHours() + ":" + DateCreated.getMinutes();
-            var row = $('<tr></tr>').attr({class: ["class1"].join(' ')}).appendTo(table);
+            let row = $('<tr></tr>').attr({class: ["class1"].join(' ')}).appendTo(table);
             $('<td class="textCenter">' + gamesData[i].id + '</td>').appendTo(row);
             $('<td>' + DateCreated + '</td>').appendTo(row);
 
 
-            for (var j = 0; j < gamesData[i].gamePlayers.length; j++) {
+            for (let j = 0; j < gamesData[i].gamePlayers.length; j++) {
+
 
                 if (gamesData[i].gamePlayers.length == 2) {
                     $('<td>' + gamesData[i].gamePlayers[j].player.email + '</td>').appendTo(row);
                 }
-                if (gamesData[i].gamePlayers.length == 1) {
-                    $('<td>' + gamesData[i].gamePlayers[0].player.email + '</td><td>Waiting for player</td>').appendTo(row);
+                if (gamesData[i].gamePlayers.length == 1 && (data.player == "Guest" || data.player.id == gamesData[i].gamePlayers[j].player.id)) {
+                    $('<td>' + gamesData[i].gamePlayers[0].player.email + '</td><td>WAITING FOR PLAYER</td>').appendTo(row);
+                }
+                if (gamesData[i].gamePlayers.length == 1 && data.player.id != null && data.player.id != gamesData[i].gamePlayers[j].player.id) {
+                    $('<td>' + gamesData[i].gamePlayers[0].player.email + '</td><td><button class="joinGameButton btn btn-warning" data-gameid=' + '"' + gamesData[i].id + '"' + '>JOIN GAME</button></td>').appendTo(row);
+                }
+                if (gamesData[i].gamePlayers[j].player.id == data.player.id) {
+                    gpid = gamesData[i].gamePlayers[j].id;
+                    isLoggedPlayer = true;
                 }
             }
-            $('<td>Game State (to do)</td>').appendTo(row);
-        }
-        // mytable.appendTo('#gamesList');
-    }
 
-    function getPlayers(gamesData) {
+            if (isLoggedPlayer === true) {
+                let gameUrl = "/web/game.html?gp=" + gpid;
+                $('<td class="textCenter"><a href=' + '"' + gameUrl + '"' + 'class="btn btn-warning" role="button">ENTER GAME</a></td>').appendTo(row);
+            } else {
+                $('<td class="textCenter">-</td>').appendTo(row);
+            }
+
+        }
+    $('.joinGameButton').click(function (e) {
+        e.preventDefault();
+
+        let joinGameUrl = "/api/game/" + $(this).data('gameid') + "/players";
+        $.post(joinGameUrl)
+            .done(function (data) {
+                console.log(data);
+                console.log("game joined");
+                gameViewUrl = "/web/game.html?gp=" + data.gpid;
+                $('#gameJoinedSuccess').show("slow").delay(2000).hide("slow");
+                setTimeout(
+                   function()
+                  {
+                       location.href = gameViewUrl;
+                   }, 3000);
+            })
+            .fail(function (data) {
+                console.log("game join failed");
+                $('#errorSignup').text(data.responseJSON.error);
+                $('#errorSignup').show("slow").delay(4000).hide("slow");
+
+            })
+            .always(function () {
+
+            });
+    });
+}
+
+function getPlayers(gamesData) {
 
         playersArray = [];
-        var playersIds = [];
+        let playersIds = [];
 
-        for (var i = 0; i < gamesData.length; i++) {
+        for (let i = 0; i < gamesData.length; i++) {
 
-            for (var j = 0; j < gamesData[i].gamePlayers.length; j++) {
+            for (let j = 0; j < gamesData[i].gamePlayers.length; j++) {
 
                 if (!playersIds.includes(gamesData[i].gamePlayers[j].player.id)) {
                     playersIds.push(gamesData[i].gamePlayers[j].player.id);
-                    var playerScoreData = {
+                    let playerScoreData = {
                         "id": gamesData[i].gamePlayers[j].player.id,
                         "email": gamesData[i].gamePlayers[j].player.email,
                         "scores": [],
                         "total": 0.0
                     };
                     playersArray.push(playerScoreData);
-                    console.log("player added");
                 }
             }
         }
         return playersArray;
-    }
+}
 
-    function addScoresToPlayersArray(playersArray) {
+function addScoresToPlayersArray(playersArray) {
 
-        for (var i = 0; i < gamesData.length; i++) {
+        for (let i = 0; i < gamesData.length; i++) {
 
-            for (var j = 0; j < gamesData[i].scores.length; j++) {
+            for (let j = 0; j < gamesData[i].scores.length; j++) {
 
-                var scorePlayerId = gamesData[i].scores[j].playerID;
+                let scorePlayerId = gamesData[i].scores[j].playerID;
 
-                for (var k = 0; k < playersArray.length; k++) {
+                for (let k = 0; k < playersArray.length; k++) {
 
                     if (playersArray[k].id == scorePlayerId) {
                         playersArray[k].scores.push(gamesData[i].scores[j].score);
@@ -173,26 +282,26 @@ $('#login-form').on('submit', function (event) {
                 }
             }
         }
-    }
+}
 
-    function showScoreBoard(playersArray) {
+function showScoreBoard(playersArray) {
 
         playersArray.sort(function (a, b) {
             return b.total - a.total;
         });
 
-        var table = "#scoreBoard";
+        let table = "#scoreBoard";
         $(table).empty();
         $('<tr><th>Name</th><th>Total</th><th>Won</th><th>Lost</th><th>Tied</th></tr>').attr({class: ["class1"].join(' ')}).appendTo(table);
 
-        for (var m = 0; m < playersArray.length; m++) {
-            var countWon = 0;
-            var countLost = 0;
-            var countTied = 0;
+        for (let m = 0; m < playersArray.length; m++) {
+            let countWon = 0;
+            let countLost = 0;
+            let countTied = 0;
 
             if (playersArray[m].scores.length > 0) {
 
-                for (var n = 0; n < playersArray[m].scores.length; n++) {
+                for (let n = 0; n < playersArray[m].scores.length; n++) {
                     if (playersArray[m].scores[n] == 0.0) {
                         countLost++;
                     } else if (playersArray[m].scores[n] == 0.5) {
@@ -202,7 +311,7 @@ $('#login-form').on('submit', function (event) {
                     }
                 }
 
-                var row = $('<tr></tr>').attr({class: ["class1"].join(' ')}).appendTo(table);
+                let row = $('<tr></tr>').attr({class: ["class1"].join(' ')}).appendTo(table);
                 $('<td>' + playersArray[m].email + '</td>').appendTo(row);
                 $("<td class='textCenter'>" + playersArray[m].total.toFixed(1) + '</td>').appendTo(row);
                 $("<td class='textCenter'>" + countWon + '</td>').appendTo(row);

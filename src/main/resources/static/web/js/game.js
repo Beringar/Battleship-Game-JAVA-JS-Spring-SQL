@@ -1,8 +1,29 @@
 var player1 = "p1_";
 var player2 = "p2_";
 var gamePlayerData = {};
+var errorMsg;
 
 doAjax(makeUrl());
+
+$('#logout-form').on('submit', function (event) {
+    event.preventDefault();
+    $.post("/api/logout")
+        .done(function () {
+            console.log("logout ok");
+            $('#logoutSuccess').show("slow").delay(2000).hide("slow");
+            setTimeout(
+                function()
+                {
+                    location.href = "/web/games.html";
+                }, 3000);
+        })
+        .fail(function () {
+            console.log("logout fails");
+        })
+        .always(function () {
+
+        });
+});
 
 
 function getParameterByName(name) {
@@ -15,6 +36,11 @@ function makeUrl() {
     return '/api/game_view/' + gamePlayerID;
 }
 
+function makePostUrl() {
+    var gamePlayerID =  getParameterByName("gp");
+    return '/api/games/players/' + gamePlayerID + '/ships';
+}
+
 function doAjax(_url) {
     $.ajax({
         url: _url,
@@ -25,6 +51,13 @@ function doAjax(_url) {
             createTable(player1);
             createTable(player2);
             showSelf(gamePlayerData);
+        },
+        error: function(e){
+            console.log(e);
+            errorMsg = e.responseJSON.error;
+            console.log(errorMsg);
+            $('#errorMsg').text("Error: " + errorMsg);
+            $('#errorMsg').show( "slow" ).delay(5000).hide( "slow" );
         }
     });
 }
@@ -127,6 +160,25 @@ function createTable(player) {
 
     gridLabel.appendTo(gridId);
     mytable.appendTo(gridId);
+}
+
+function postShipLocations (postUrl) {
+    $.post({
+        url: postUrl,
+        data: shipsJSON,
+        dataType: "text",
+        contentType: "application/json"
+    })
+        .done(function (response) {
+            console.log(response);
+            $('#okShips').text(JSON.parse(response).OK);
+            $('#okShips').show( "slow" ).delay(4000).hide( "slow" );
+        })
+        .fail(function (response) {
+            console.log(response);
+            $('#errorShips').text(JSON.parse(response.responseText).error);
+            $('#errorShips').show( "slow" ).delay(4000).hide( "slow" );
+        })
 }
 
 

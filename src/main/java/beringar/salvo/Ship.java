@@ -18,6 +18,8 @@ public class Ship {
 
     private String shipType;
 
+
+
     @JsonIgnore
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name="gamePlayer_id")

@@ -24,14 +24,23 @@
     <form class="textCenter" id="login-form" onsubmit="return false">
         <label>Name: <input id="username" type="email" name="username" required></label>
         <label>Password: <input id="password" type="password" name="password" required></label>
-        <input type="submit" class="submitbutton" name="login" value="Login" />
-        <input type="submit" class="submitbutton" name="signup" value="Sign Up" />
+        <input type="submit" class="submitbutton btn btn-info" name="login" value="Login" />
+        <input type="submit" class="submitbutton btn btn-info" name="signup" value="Sign Up" />
     </form>
+    <h3 id="signupSuccess" class="textCenter">Player created Successfully!</h3>
+    <h3 id="errorSignup" class="textCenter"></h3>
     <h3 id="loginSuccess" class="textCenter">Login Successful!</h3>
     <h3 id="loginFailed" class="textCenter">Login failed! Bad credentials!</h3>
     <h3 id="logoutSuccess" class="textCenter">Logout Successful!</h3>
+    <h3 id="gameCreatedSuccess" class="textCenter">Game Created Successfully! Redirecting to Game Page...</h3>
+    <h3 id="gameJoinedSuccess" class="textCenter">Game Joined Successfully! Redirecting to Game Page...</h3>
+
     <form class="textCenter" id="logout-form" onsubmit="return false">
-        <button>Log out</button>
+        <button type="submit" class="btn btn-info">Log out</button>
+    </form>
+    <br>
+    <form class="textCenter" id="createGame" onsubmit="return false">
+        <button type="submit" class="btn btn-warning">Create New Game</button>
     </form>
     <h2 class="gridLabel">GAME LIST</h2>
     <div class="row">
