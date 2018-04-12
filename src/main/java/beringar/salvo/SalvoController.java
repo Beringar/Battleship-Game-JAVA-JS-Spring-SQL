@@ -1,19 +1,16 @@
 package beringar.salvo;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.repository.query.Param;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
-import static java.util.stream.Collectors.collectingAndThen;
+import static java.util.stream.Collectors.toCollection;
 import static java.util.stream.Collectors.toList;
 
 @RestController
@@ -34,6 +31,9 @@ public class SalvoController {
 
     @Autowired
     private ScoreRepository scoreRepository;
+
+    @Autowired
+    private SalvoRepository salvoRepository;
 
 
 
@@ -170,12 +170,14 @@ public class SalvoController {
 
     private Map<String, Object> GameViewToDTO(Game game, GamePlayer gamePlayer) {
         List<Ship> ships = gamePlayer.getShips();
+        Long currentPlayerID = gamePlayer.getPlayer().getId();
         Map<String, Object> dto = new LinkedHashMap<String, Object>();
         dto.put("id", game.getId());
         dto.put("created", game.getCreationDate());
         dto.put("gamePlayers", GamePlayerList(game.getGamePlayers()));
         dto.put("ships", ShipLocationsList(ships));
         dto.put("salvoes", GetSalvosFromAllGamePlayers(game));
+        dto.put("hits", getHits(gamePlayer, getOpponent(game, currentPlayerID)));
         return dto;
     }
 
@@ -263,7 +265,7 @@ public class SalvoController {
             return new ResponseEntity<>(makeMap("error", "You can't place ships if You're Not Logged In! Please Log in or Sign Up for a new player account."), HttpStatus.UNAUTHORIZED);
         }
         GamePlayer gamePlayerToPlaceShips = gamePlayerRepository.getOne(gamePlayerID);
-        if (gamePlayerToPlaceShips.getShips().size() == 5) {
+        if (gamePlayerToPlaceShips.getShips().size() >= 5) {
             return new ResponseEntity<>(makeMap("error", "Error: Your ships are already placed!"), HttpStatus.UNAUTHORIZED);
         }
         for (Ship item : ships) {
@@ -271,6 +273,22 @@ public class SalvoController {
             shipRepository.save(item);
         }
         return new ResponseEntity<>(makeMap("OK", "Ship positions saved successfully! "), HttpStatus.CREATED);
+    }
+
+    @RequestMapping(path = "/games/players/{gamePlayerID}/salvoes", method = RequestMethod.POST)
+    public ResponseEntity<Map<String, Object>> setSalvoes(@PathVariable Long gamePlayerID, @RequestBody Salvo salvo, Authentication authentication) {
+        if (authentication == null){
+            return new ResponseEntity<>(makeMap("error", "You can't fire a Salvo if You're Not Logged In! Please Log in or Sign Up for a new player account."), HttpStatus.UNAUTHORIZED);
+        }
+        GamePlayer gamePlayerToFireSalvo = gamePlayerRepository.getOne(gamePlayerID);
+        /*if (gamePlayerToPlaceShips.getShips().size() >= 5) {
+            return new ResponseEntity<>(makeMap("error", "Error: Your ships are already placed!"), HttpStatus.UNAUTHORIZED);
+        }*/
+
+        salvo.setGamePlayer(gamePlayerToFireSalvo);
+        salvoRepository.save(salvo);
+
+        return new ResponseEntity<>(makeMap("OK", "Salvo fired and saved successfully! "), HttpStatus.CREATED);
     }
 
 
@@ -293,6 +311,39 @@ public class SalvoController {
         Map<String, Object> map = new HashMap<>();
         map.put(key, value);
         return map;
+    }
+
+    private GamePlayer getOpponent(Game game, Long currentPlayerID){
+        GamePlayer opponentGameplayer = new GamePlayer();
+        for (GamePlayer item : game.getGamePlayers()) {
+            Long playerIDtoCompare = item.getPlayer().getId();
+            if (playerIDtoCompare != currentPlayerID) {
+                opponentGameplayer = item;
+            }
+            }
+            return opponentGameplayer;
+    }
+
+    private List<String> getHits(GamePlayer gamePlayer, GamePlayer opponentGameplayer) {
+
+        List <String> salvoLocationsList = new ArrayList<>();
+        List <String> shipLocationsList = new ArrayList<>();
+
+        opponentGameplayer.getSalvoes().stream()
+                .map(salvo -> salvo.getSalvoLocations())
+                .forEach(item -> salvoLocationsList.addAll(item));
+
+        System.out.println(salvoLocationsList);
+
+        gamePlayer.getShips().stream()
+                .map(ship -> ship.getShipLocations())
+                .forEach(item -> shipLocationsList.addAll(item));
+
+        System.out.println(shipLocationsList);
+
+        return shipLocationsList.stream()
+                .filter(item -> salvoLocationsList.contains(item))
+                .collect(Collectors.toList());
     }
 
 

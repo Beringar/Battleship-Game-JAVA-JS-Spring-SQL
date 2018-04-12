@@ -91,6 +91,8 @@ function rotate(ship) {
 		grid.update($(shipID), currentX, currentY, currentHeight, currentWidth);
 		console.log("x: " + currentX + " y: " + currentY + " w: " + currentHeight + " h: " + currentWidth);
 	} else {
+        var msg = "Illegal position. Collision or out of board!";
+		displayOverlay(msg);
 		console.log("Illegal position. Collision or Out of board.");
 	}
 

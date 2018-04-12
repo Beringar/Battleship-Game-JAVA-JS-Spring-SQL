@@ -2,6 +2,11 @@ var player1 = "p1_";
 var player2 = "p2_";
 var gamePlayerData = {};
 var errorMsg;
+var you = "";
+var viewer = "";
+var youID = "";
+var salvoPositions = [];
+var salvoJSON;
 
 doAjax(makeUrl());
 
@@ -25,6 +30,14 @@ $('#logout-form').on('submit', function (event) {
         });
 });
 
+$('#postSalvo').click(function () {
+    makeSalvoJSON();
+    if (salvoPositions.length == 0){
+        console.log("No salvos to shoot!");
+    } else {
+        postSalvo(makePostUrlSalvoes());
+    }
+});
 
 function getParameterByName(name) {
     var match = RegExp('[?&]' + name + '=([^&]*)').exec(window.location.search);
@@ -41,6 +54,11 @@ function makePostUrl() {
     return '/api/games/players/' + gamePlayerID + '/ships';
 }
 
+function makePostUrlSalvoes() {
+    var gamePlayerID =  getParameterByName("gp");
+    return '/api/games/players/' + gamePlayerID + '/salvoes';
+}
+
 function doAjax(_url) {
     $.ajax({
         url: _url,
@@ -48,8 +66,8 @@ function doAjax(_url) {
         success: function (data) {
             gamePlayerData = data;
             console.log(gamePlayerData);
-            createTable(player1);
-            createTable(player2);
+            // createTable(player1);
+            // createTable(player2);
             showSelf(gamePlayerData);
         },
         error: function(e){
@@ -63,9 +81,9 @@ function doAjax(_url) {
 }
 
 function showSelf (gamePlayerData) {
-    var you = "";
-    var viewer = "";
-    var youID = "";
+    you = "";
+    viewer = "";
+    youID = "";
 
     gamePlayerData.gamePlayers.forEach(function(gamePlayer) {
         if (gamePlayer.id == getParameterByName("gp")) {
@@ -76,7 +94,10 @@ function showSelf (gamePlayerData) {
         }
     });
 
-    $('#gamePlayerDetails').html("Game created: " + new Date(gamePlayerData.created) + "<br>Players:<br>" + you + " (you) vs. " + viewer);
+    $('#gamePlayerDetails').html("Game created: " + new Date(gamePlayerData.created));
+    $('#currentPlayerName').text(you);
+    $('#OpponentPlayerName').text(viewer);
+
 
     gamePlayerData.ships.forEach(function(ship) {
 
@@ -94,10 +115,11 @@ function showSelf (gamePlayerData) {
         salvo.locations.forEach(function(location) {
             var cellID;
             if (salvo.player == youID){
-                cellID = "#p2_" + location;
+                cellID = "#" + location;
                 $(cellID).addClass("salvoCell");
 
                 console.log("Your salvo on " + location);
+                $(cellID).text(salvo.turn);
             } else {
                 cellID = "#p1_" + location;
                 if ($(cellID).hasClass("shipCell")) {
@@ -106,11 +128,11 @@ function showSelf (gamePlayerData) {
                     console.log("Opponent Hits Ship on " + location);
                 } else {
                     $(cellID).addClass("salvoCell");
-
+                    $(cellID).text(salvo.turn);
                     console.log("Opponent salvo on " + location);
                 }
             }
-            $(cellID).text(salvo.turn);
+
         });
     });
 }
@@ -179,6 +201,74 @@ function postShipLocations (postUrl) {
             $('#errorShips').text(JSON.parse(response.responseText).error);
             $('#errorShips').show( "slow" ).delay(4000).hide( "slow" );
         })
+}
+
+function postSalvo (postUrl) {
+    $.post({
+        url: postUrl,
+        data: salvoJSON,
+        dataType: "text",
+        contentType: "application/json"
+    })
+        .done(function (response) {
+            console.log(response);
+            $('#okShips').text(JSON.parse(response).OK);
+            $('#okShips').show( "slow" ).delay(4000).hide( "slow" );
+        })
+        .fail(function (response) {
+            console.log(response);
+            $('#errorShips').text(JSON.parse(response.responseText).error);
+            $('#errorShips').show( "slow" ).delay(4000).hide( "slow" );
+        })
+}
+
+function displayOverlay(text) {
+    $("<table id='overlay'><tbody><tr><td>" + text + "<br><button class='btn btn-info' onclick='removeOverlay()'>Ok! I got it.</button> </td></tr></tbody></table>").css({
+        "position": "absolute",
+        "top": "0px",
+        // "left": "0px",
+        "width": "451px",
+        "height": "100%",
+        "background-color": "rgba(133,43,0,.82)",
+        "z-index": "10000",
+        "vertical-align": "middle",
+        "text-align": "center",
+        "color": "#fff",
+        "font-size": "40px",
+        "font-weight": "bold",
+        "cursor": "wait"
+    }).appendTo(".gridShips").effect( "bounce", { times: 5 }, { distance: 20 }, "slow" );
+}
+
+function removeOverlay() {
+
+    $("#overlay").hide('puff', 'slow', function(){ $("#overlay").remove(); });
+}
+
+function makeSalvoJSON() {
+    salvoPositions = [];
+    salvoObject = {};
+    if (salvo1cellID !== "salvoout1" && salvo1cellID !== "salvoout2" && salvo1cellID !== "salvoout3" && salvo1cellID !== "salvoout4" && salvo1cellID !== "salvoout5") {
+        salvoPositions.push(salvo1cellID);
+    }
+    if (salvo2cellID !== "salvoout1" && salvo2cellID !== "salvoout2" && salvo2cellID !== "salvoout3" && salvo2cellID !== "salvoout4" && salvo2cellID !== "salvoout5") {
+        salvoPositions.push(salvo2cellID);
+    }
+    if (salvo3cellID !== "salvoout1" && salvo3cellID !== "salvoout2" && salvo3cellID !== "salvoout3" && salvo3cellID !== "salvoout4" && salvo3cellID !== "salvoout5") {
+        salvoPositions.push(salvo3cellID);
+    }
+    if (salvo4cellID !== "salvoout1" && salvo4cellID !== "salvoout2" && salvo4cellID !== "salvoout3" && salvo4cellID !== "salvoout4" && salvo4cellID !== "salvoout5") {
+        salvoPositions.push(salvo4cellID);
+    }
+    if (salvo5cellID !== "salvoout1" && salvo5cellID !== "salvoout2" && salvo5cellID !== "salvoout3" && salvo5cellID !== "salvoout4" && salvo5cellID !== "salvoout5") {
+        salvoPositions.push(salvo5cellID);
+    }
+    salvoObject = {
+        salvoLocations : salvoPositions
+    }
+
+    salvoJSON = JSON.stringify(salvoObject);
+    console.log(salvoJSON);
 }
 
 

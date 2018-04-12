@@ -87,11 +87,16 @@
 }
 
 .salvoCell {
-    background-color: lightskyblue ;
+    background-image: url(../img/target.png);
+    background-size: cover;
+    /* background-color: #87cefa00; */
+    color: white;
+
 }
 
 .hitCell {
-    background-color: red;
+    background-image: url(../img/hit3.gif);
+    background-size: cover;
 }
 
 #gamePlayerDetails {
@@ -118,9 +123,13 @@
 
 .grid-stack-item-content {
     color: #2c3e50;
-    background-color: #18bc9c;
+    background-color: #9acd33;
     opacity: 0.8;
-    border-radius: 10px;
+    border-radius: 20px;
+    border: 1px solid #208437;
+    cursor: -webkit-grab;
+    cursor:    -moz-grab;
+    cursor:         grab;
 }
 
 .sidebar {
@@ -130,25 +139,11 @@
     text-align: center;
 }
 
-.salvoShot {
-    border: 2px dashed green;
-    text-align: center;
-    line-height: 45px;
-    z-index: 10;
-    background: rgba(0, 255, 0, 0.1);
-    cursor: default;
-    display: inline-block;
-}
-
-.salvoShot .grid-stack-item-content {
-    background: none;
-
-}
 
 .gridShips {
     width: 451px;
     height: 451px;
-    background-image: url(../img/gridback.jpg);
+    background-image: url(../img/backships.gif);
     margin: 0 auto;
     background-size: cover;
 
@@ -171,9 +166,16 @@
 
 /* DivTable.com */
 .divTable{
+
     display: table;
-    width: 550px;
+    width: 440px;
     margin: 0 auto;
+
+    background-size: cover;
+    background-image: url(../img/backships.gif);
+
+
+    color: white;
 }
 .divTableRow {
     display: table-row;
@@ -183,12 +185,14 @@
     display: table-header-group;
 }
 .divTableCell, .divTableHead {
-    border: 1px solid #999999;
+    border: 1px dashed #6786ff;
+    border-left-width: 0;
+    border-top-width: 0;
     display: table-cell;
     /*padding: 3px 10px;*/
-    width: 50px;
-    height: 50px;
-    line-height: 50px;
+    width: 40px;
+    height: 40px;
+    line-height: 40px;
     text-align: center;
 }
 .divTableHeading {
@@ -203,4 +207,24 @@
 }
 .divTableBody {
     display: table-row-group;
+}
+
+img {
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -o-user-select: none;
+    user-select: none;
+}
+
+img{-webkit-user-drag: none;}
+
+button:focus {
+    outline: none;
+}
+
+.shipDragging {
+    cursor: -webkit-grabbing;
+    cursor:    -moz-grabbing;
+    cursor:         grabbing;
 }
