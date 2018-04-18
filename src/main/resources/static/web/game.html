@@ -4,7 +4,7 @@
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-
+    <link href="https://fonts.googleapis.com/css?family=Dosis:200,300,400,600,800" rel="stylesheet">
     <link rel="stylesheet" href="css/normalize.css" />
     <link rel="stylesheet" href="css/main.css" />
 
@@ -37,40 +37,35 @@
 <body>
 
 <div class="container-fluid">
-<br>
-    <h2 class="gridLabel">GAME view Salvo</h2>
-    <br>
-    <form class="textCenter" id="logout-form" onsubmit="return false">
-        <button type="submit" class="btn btn-info">Log out</button>
-    </form>
-    <br>
+    <div class="bannerTitle"><img class="bannerImage" src="img/titlebannersalvo.png"></div>
+    <div>
+        <form class="form" id="logout-form" onsubmit="return false">
+            <button type="submit" class="btn btn-info">Log out</button>
+        </form>
+    </div>
     <h3 id="logoutSuccess" class="textCenter">Logout Successful!</h3>
     <div id="errorMsg" class="alert alert-danger textCenter"></div>
-
     <div id="gamePlayerDetails" class="gameDetails"></div>
 
-    <div class="row">
+        <div id="placingShipsBoard" class="row">
                 <div class="col-sm-12">
                     <div id="gridShipsContainer" class="gridShips">
                         <div class="grid-stack grid-stack-10" id="grid1">
                         </div>
                     </div>
                 </div>
-    </div>
-    <div class="row">
-        <div class="col-sm-12 textCenter">
-                <br>
+            <div class="col-sm-12 textCenter">
+                <div class="placeshipsInstructions">Place your ships by dragging and dropping them onto desired positions.<br>You can rotate ships by clicking <img class="rotateIcon" src="img/rotatewhite.png"> icon on every ship.<br>When you finish positioning click on PLACE SHIPS button to begin the battle!</div>
                 <h3 id="okShips" class="textCenter"></h3>
                 <h3 id="errorShips" class="textCenter"></h3>
-                <button class="btn btn-info" id="save-grid">Save Grid</button>
+                <button class="btn btn-outline-light" id="save-grid">PLACE SHIPS!</button>
                 <br>
+            </div>
         </div>
-    </div>
-
-
-    <div class="row">
+        <div class="battleGrids">
+            <div class="row">
         <div class="col-sm-6">
-            <div class="textCenter"><h4 id="currentPlayerName"></h4><h3>Your Ships</h3></div>
+            <div class="textCenter"><h3>Your Ships</h3><h4 class="textCenter" id="currentPlayerName"></h4></div>
             <div class="divTable">
                 <div class="divTableBody">
                     <div class="divTableRow">
@@ -221,11 +216,12 @@
 
             </div>
             <!--// table end //-->
+
         </div>
 
 
         <div class="col-sm-6">
-<div class="textCenter"><h4 id="OpponentPlayerName"></h4><h3>Your Opponent</h3></div>
+<div class="textCenter"><h3>Your Opponent</h3><h4 class="textCenter" id="OpponentPlayerName"></h4></div>
             <div class="divTable">
                 <div class="divTableBody">
                     <div class="divTableRow">
@@ -377,22 +373,49 @@
     </div>
             <!--// table end //-->
             <div class="drag-zone">
-                <div class="salvosToShot">Your salvoes to shoot:</div>
                 <div class="droppable salvoCharger caught--it" id="salvoout1"><div class="draggable" id="salvo1"></div></div>
                 <div class="droppable salvoCharger caught--it" id="salvoout2"><div class="draggable" id="salvo2"></div></div>
                 <div class="droppable salvoCharger caught--it" id="salvoout3"><div class="draggable" id="salvo3"></div></div>
                 <div class="droppable salvoCharger caught--it" id="salvoout4"><div class="draggable" id="salvo4"></div></div>
                 <div class="droppable salvoCharger caught--it" id="salvoout5"><div class="draggable" id="salvo5"></div></div>
+                <div class="textCenter"><button class="btn btn-warning" id="postSalvo">Fire Salvo!</button></div>
             </div>
-            <div class="textCenter"><button class="btn btn-warning" id="postSalvo">Fire Salvo!</button></div>
+
+
+
 
 </div>
     </div>
-
-
-
-
+            <div class="row">
+        <div class="col-sm-6">
+            <div id="gameRecordSelf">
+                <table id="gameRecordSelfTable" class="table table-striped table-dark">
+                  <col class="columnTurn">
+                  <col class="columnDamages">
+                  <col class="columnShipsLeft">
+                  <thead>
+                  <th>Turn</th><th>Hits on your ships</th><th>Ships Left</th>
+                  </thead>
+                  <tbody></tbody>
+              </table>
+            </div>
+        </div>
+        <div class="col-sm-6">
+            <div id="gameRecordOpponent">
+                <table id="gameRecordOppTable" class="table table-striped table-dark">
+                    <col class="columnTurn">
+                    <col class="columnDamages">
+                    <col class="columnShipsLeft">
+                    <thead>
+                    <th>Turn</th><th>Hits on opponent ships</th><th>Ships Left</th>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
     </div>
+        </div>
+</div>
 
 
 

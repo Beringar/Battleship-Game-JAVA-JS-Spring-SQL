@@ -62,6 +62,7 @@ $('#login-form').on('submit', function (event) {
                         $('#loginFailed').show( "slow" ).delay(2000).hide( "slow" );
                         $("#username").val("");
                         $("#password").val("");
+                        $("#username").focus();
                         // $('#loginFailed').hide( "slow" );
                     })
                     .always(function() {
@@ -70,9 +71,10 @@ $('#login-form').on('submit', function (event) {
             })
             .fail(function(data) {
                 console.log("signup failed");
-                console.log(data);
-                // $("#username").val("");
+                // console.log(data);
+                $("#username").val("");
                 $("#password").val("");
+                $("#username").focus();
                 $('#errorSignup').text(data.responseJSON.error);
                 $('#errorSignup').show( "slow" ).delay(3000).hide( "slow" );
             })
@@ -159,30 +161,30 @@ function updateView() {
         showScoreBoard(playersArray);
         if (data.player == "Guest") {
             $('#currentPlayer').text(data.player);
-            $('#logout-form').hide();
-            $('#login-form').show();
+            $('#logout-form').hide("slow");
+            $('#login-form').show("slow");
 
         } else {
             $('#currentPlayer').text(data.player.name);
-            $('#login-form').hide();
-            $('#logout-form').show();
+            $('#login-form').hide("slow");
+            $('#logout-form').show("slow");
 
         }
 }
 
 function showGamesTable(gamesData) {
         // let mytable = $('<table></table>').attr({id: "gamesTable", class: ""});
-        let table = "#gamesList";
+        let table = "#gamesList tbody";
         let gpid;
         $(table).empty();
-        $('<tr><th>Game ID</th><th>Created</th><th>Player 1</th><th>Player 2</th><th>Game Actions</th></tr>').attr({class: ["class1"].join(' ')}).appendTo(table);
         for (let i = 0; i < gamesData.length; i++) {
 
             let isLoggedPlayer = false;
+            let joinButtonHtml = null;
 
             let DateCreated = new Date(gamesData[i].created);
             DateCreated = DateCreated.getMonth() + 1 + "/" + DateCreated.getDate() + " " + DateCreated.getHours() + ":" + DateCreated.getMinutes();
-            let row = $('<tr></tr>').attr({class: ["class1"].join(' ')}).appendTo(table);
+            let row = $('<tr></tr>').appendTo(table);
             $('<td class="textCenter">' + gamesData[i].id + '</td>').appendTo(row);
             $('<td>' + DateCreated + '</td>').appendTo(row);
 
@@ -194,10 +196,12 @@ function showGamesTable(gamesData) {
                     $('<td>' + gamesData[i].gamePlayers[j].player.email + '</td>').appendTo(row);
                 }
                 if (gamesData[i].gamePlayers.length == 1 && (data.player == "Guest" || data.player.id == gamesData[i].gamePlayers[j].player.id)) {
-                    $('<td>' + gamesData[i].gamePlayers[0].player.email + '</td><td>WAITING FOR PLAYER</td>').appendTo(row);
+                    $('<td>' + gamesData[i].gamePlayers[0].player.email + '</td><td class="yellow500">WAITING FOR PLAYER</td>').appendTo(row);
                 }
                 if (gamesData[i].gamePlayers.length == 1 && data.player.id != null && data.player.id != gamesData[i].gamePlayers[j].player.id) {
-                    $('<td>' + gamesData[i].gamePlayers[0].player.email + '</td><td><button class="joinGameButton btn btn-warning" data-gameid=' + '"' + gamesData[i].id + '"' + '>JOIN GAME</button></td>').appendTo(row);
+                    $('<td>' + gamesData[i].gamePlayers[0].player.email + '</td><td class="yellow500">WAITING FOR PLAYER</td>').appendTo(row);
+                    joinButtonHtml = '<td class="textCenter"><button class="joinGameButton btn btn-info" data-gameid=' + '"' + gamesData[i].id + '"' + '>JOIN GAME</button></td>';
+
                 }
                 if (gamesData[i].gamePlayers[j].player.id == data.player.id) {
                     gpid = gamesData[i].gamePlayers[j].id;
@@ -208,9 +212,13 @@ function showGamesTable(gamesData) {
             if (isLoggedPlayer === true) {
                 let gameUrl = "/web/game.html?gp=" + gpid;
                 $('<td class="textCenter"><a href=' + '"' + gameUrl + '"' + 'class="btn btn-warning" role="button">ENTER GAME</a></td>').appendTo(row);
+            } else if (joinButtonHtml !== null){
+                $(joinButtonHtml).appendTo(row);
             } else {
                 $('<td class="textCenter">-</td>').appendTo(row);
-            }
+        }
+
+
 
         }
     $('.joinGameButton').click(function (e) {
@@ -290,9 +298,8 @@ function showScoreBoard(playersArray) {
             return b.total - a.total;
         });
 
-        let table = "#scoreBoard";
+        let table = "#scoreBoard tbody";
         $(table).empty();
-        $('<tr><th>Name</th><th>Total</th><th>Won</th><th>Lost</th><th>Tied</th></tr>').attr({class: ["class1"].join(' ')}).appendTo(table);
 
         for (let m = 0; m < playersArray.length; m++) {
             let countWon = 0;
@@ -311,7 +318,7 @@ function showScoreBoard(playersArray) {
                     }
                 }
 
-                let row = $('<tr></tr>').attr({class: ["class1"].join(' ')}).appendTo(table);
+                let row = $('<tr></tr>').appendTo(table);
                 $('<td>' + playersArray[m].email + '</td>').appendTo(row);
                 $("<td class='textCenter'>" + playersArray[m].total.toFixed(1) + '</td>').appendTo(row);
                 $("<td class='textCenter'>" + countWon + '</td>').appendTo(row);

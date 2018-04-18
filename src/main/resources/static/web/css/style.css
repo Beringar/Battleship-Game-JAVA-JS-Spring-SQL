@@ -1,3 +1,21 @@
+body {
+    background: url(../img/back2.jpg);
+    font-family: 'Dosis', sans-serif;
+}
+
+.bannerTitle {
+    margin: 15px auto 0;
+    text-align: center;
+    background: #00000038;
+    border-radius: 20px;
+
+}
+
+.bannerImage {
+    width: 50%;
+    margin-top: 8px;
+}
+
 #loginFailed, #errorSignup, #errorShips {
     display: none;
     background-color: indianred;
@@ -23,7 +41,7 @@
     padding: 10px;
 }
 
-#basicTable {
+/*#basicTable {
     padding: 20px;
     border: 1px;
     padding: 0;
@@ -43,44 +61,25 @@
 
 #basicTable th {
     border: none;
-}
+}*/
 
 #gamesList {
-    padding: 20px;
-    border: 1px;
-    padding: 0;
-    border-collapse: collapse;
-    width: 85%;
+    width: 75%;
     margin: 0 auto;
-    margin-bottom: 15px;
-}
-
-#gamesList td, th {
-    border: 1px;
-    border-style: solid;
-    border-color: #000;
-    padding: 6px;
+    opacity: 0.9;
 
 }
+
+
 
 #scoreBoard {
-    padding: 20px;
-    border: 1px;
-    padding: 0;
-    border-collapse: collapse;
     width: 60%;
     margin: 0 auto;
-    margin-top: 10px;
-    margin-bottom: 30px;
-}
+    opacity: 0.9;
 
-#scoreBoard td, th {
-    border: 1px;
-    border-style: solid;
-    border-color: #000;
-    padding: 6px;
 
 }
+
 
 .shipCell {
     background-color: yellowgreen;
@@ -173,6 +172,8 @@
 
     background-size: cover;
     background-image: url(../img/backships.gif);
+    opacity: 0.82;
+    border-radius: 8px;
 
 
     color: white;
@@ -228,3 +229,105 @@ button:focus {
     cursor:    -moz-grabbing;
     cursor:         grabbing;
 }
+
+.columnTurn {
+    width: 20%;
+}
+
+.columnShipsLeft {
+    width: 20%;
+}
+
+.columnDamages {
+    width: 60%;
+}
+
+.hitblast {
+    width: 30px;
+}
+
+#placingShipsBoard {
+    display: none;
+    background: #000000bf;
+    width: 80%;
+    margin: 0 auto;
+    padding: 25px;
+    border-radius: 1.5em;
+}
+
+#gameRecordOppTable, #gameRecordSelfTable {
+    opacity: 0.7;
+}
+
+.table td, .table th {
+    vertical-align: middle;
+    padding: .55rem;
+}
+
+.form-inline > * {
+    margin: 3px 6px !important;
+}
+
+#login-form {
+    justify-content: flex-end;
+    color: white;
+
+}
+
+#username, #password {
+    background-color: #f8f9fa94;
+}
+
+.whiteColor {
+    color: white;
+    margin-top: 10px;
+}
+
+.table th {
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+.yellow500 {
+    font-weight: 600;
+    color: #ffc107;
+}
+
+#scoreBoard > tbody > tr:first-child > td {
+    color: #ffc107;
+}
+
+#createGame {
+    margin-top: 10px;
+}
+
+#loginBlock {
+    margin-top: 10px;
+}
+
+.currentPlayerContainer {
+    text-align: center;
+}
+
+#currentPlayer {
+    font-size: 1.2em;
+    font-weight: 600;
+}
+
+.placeshipsInstructions {
+
+    width: 75%;
+    margin: 10px auto 10px;
+    font-size: 1.2em;
+    color: white;
+
+}
+
+#save-grid {
+    font-size: 1.3em;
+}
+
+.battleGrids {
+    display: none;
+}
+

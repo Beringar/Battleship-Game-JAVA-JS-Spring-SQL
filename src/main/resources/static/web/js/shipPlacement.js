@@ -51,7 +51,7 @@ $(function () {
 		1, 1, 3, 1, false, 1, 3, 1, 3, "submarine");
 	grid.addWidget($('<div id="destroyer"><div class="grid-stack-item-content"><button class="rotateButton" onclick="rotate(destroyer)"><img class="rotateIcon" src="img/rotate.png"></button></div><div/>'),
 		1, 1, 1, 3, false, 1, 3, 1, 3, "destroyer");
-	grid.addWidget($('<div id="patrolBoat"><div class="grid-stack-item-content"><button class="rotateButton" onclick="rotate(patrolBoat)"><img class="rotateIcon" src="img/rotate.png"></button></div><div/>'),
+	grid.addWidget($('<div id="patrolboat"><div class="grid-stack-item-content"><button class="rotateButton" onclick="rotate(patrolBoat)"><img class="rotateIcon" src="img/rotate.png"></button></div><div/>'),
 		1, 1, 1, 2, false, 1, 2, 1, 2, "patrolBoat");
 
 	// $('.iii').draggable({
