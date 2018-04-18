@@ -2,7 +2,7 @@ var carrier = "carrier";
 var battleship = "battleship";
 var submarine = "submarine";
 var destroyer = "destroyer";
-var patrolBoat = "patrolBoat";
+var patrolboat = "patrolboat";
 var grid;
 
 var positions;
@@ -31,6 +31,7 @@ $(function () {
 		//  },
 		float: true,
 		removeTimeout: 100,
+        disableOneColumnMode: true,
 		acceptWidgets: '.salvoShot'
 	};
 
@@ -51,7 +52,7 @@ $(function () {
 		1, 1, 3, 1, false, 1, 3, 1, 3, "submarine");
 	grid.addWidget($('<div id="destroyer"><div class="grid-stack-item-content"><button class="rotateButton" onclick="rotate(destroyer)"><img class="rotateIcon" src="img/rotate.png"></button></div><div/>'),
 		1, 1, 1, 3, false, 1, 3, 1, 3, "destroyer");
-	grid.addWidget($('<div id="patrolboat"><div class="grid-stack-item-content"><button class="rotateButton" onclick="rotate(patrolBoat)"><img class="rotateIcon" src="img/rotate.png"></button></div><div/>'),
+	grid.addWidget($('<div id="patrolboat"><div class="grid-stack-item-content"><button class="rotateButton" onclick="rotate(patrolboat)"><img class="rotateIcon" src="img/rotate.png"></button></div><div/>'),
 		1, 1, 1, 2, false, 1, 2, 1, 2, "patrolBoat");
 
 	// $('.iii').draggable({
@@ -136,3 +137,11 @@ function renderPositions(positions) {
 	console.log(shipData);
 	shipsJSON = JSON.stringify(shipData);
 }
+
+var shipPositionMsg = function(items) {
+    console.log(items[0].id + " " + items[0].x + " " + items[0].y);
+};
+
+$('#grid1').on('change', function(event, items) {
+    shipPositionMsg(items);
+});

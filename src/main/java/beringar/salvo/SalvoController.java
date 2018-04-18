@@ -264,7 +264,7 @@ public class SalvoController {
         if (gamePlayersCount == 2) {
             return new ResponseEntity<>(makeMap("error", "Game is full!"), HttpStatus.FORBIDDEN);
         }
-        return new ResponseEntity<>(makeMap("error", "Something went wrong! Try again!"), HttpStatus.FORBIDDEN);
+        throw new RuntimeException("shflghfg");
     }
 
     @RequestMapping(path = "/games/players/{gamePlayerID}/ships", method = RequestMethod.POST)

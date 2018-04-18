@@ -32,6 +32,7 @@ $('#login-form').on('submit', function (event) {
                 $('#loginFailed').show( "slow" ).delay(2000).hide( "slow" );
                 $("#username").val("");
                 $("#password").val("");
+                $("#username").focus();
                 // $('#loginFailed').hide( "slow" );
             })
             .always(function() {
