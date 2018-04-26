@@ -182,5 +182,13 @@ var salvo5cellID = "salvoout5";
 
 })();
 
+function resetSalvoCellIds(){
+    salvo1cellID = "salvoout1";
+    salvo2cellID = "salvoout2";
+    salvo3cellID = "salvoout3";
+    salvo4cellID = "salvoout4";
+    salvo5cellID = "salvoout5";
+}
+
 
 

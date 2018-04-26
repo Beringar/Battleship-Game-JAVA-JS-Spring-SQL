@@ -167,24 +167,30 @@ textarea {
 }
 
 .waitingPlayer {
-    background: #eec800;
-    animation: glow 1.5s ease infinite;
-    /*animation: grow .75s ease infinite;*/
+    animation: grow 1.75s ease infinite;
+
+}
+
+.movingShip {
+    animation: grow .75s ease infinite;
+    color: #eec800 !important;
+    text-align: center;
+    font-weight: 600 !important;
 }
 
 
-
-
 @keyframes grow {
-    from { transform: scale(0); }
+    from { transform: scale(0.5);
+    opacity: 0}
     to {
-        opacity: 0;
+        opacity: 1;
         transform: scale(1);
     }
 }
 
 .salvoCharger {
     border-radius: 6px;
+    background-color: #8080804f;
 }
 .drag-zone {
     display: flex;

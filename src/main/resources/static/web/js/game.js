@@ -5,12 +5,13 @@ var errorMsg;
 var you = "";
 var viewer = "";
 var youID = "";
-var salvoPositions = [];
 var salvoJSON;
+var salvoPositions = [];
+var waitState = false;
 
-doAjax(makeUrl());
+refreshGameView(makeUrl());
 
-$('#logout-form').on('submit', function (event) {
+$('#logoutButton').on('click', function (event) {
     event.preventDefault();
     $.post("/api/logout")
         .done(function () {
@@ -30,14 +31,7 @@ $('#logout-form').on('submit', function (event) {
         });
 });
 
-$('#postSalvo').click(function () {
-    makeSalvoJSON();
-    if (salvoPositions.length == 0){
-        console.log("No salvos to shoot!");
-    } else {
-        postSalvo(makePostUrlSalvoes());
-    }
-});
+
 
 function getParameterByName(name) {
     var match = RegExp('[?&]' + name + '=([^&]*)').exec(window.location.search);
@@ -59,7 +53,7 @@ function makePostUrlSalvoes() {
     return '/api/games/players/' + gamePlayerID + '/salvoes';
 }
 
-function doAjax(_url) {
+function refreshGameView(_url) {
     $.ajax({
         url: _url,
         type: 'GET',
@@ -68,12 +62,94 @@ function doAjax(_url) {
             // console.log(gamePlayerData);
             // createTable(player1);
             // createTable(player2);
-            showSelf(gamePlayerData);
-            if (gamePlayerData.gameState == "PLACESHIPS"){
+
+
+
+            $('#gameStateBlock').html('<span class="gameStateLabel">TURN: </span><span class="gameStateLabelBig">' + getTurn(gamePlayerData) + '</span><span class="gameStateLabel"> ACTION REQUIRED: </span><span class="gameStateLabelBig">' + gamePlayerData.gameState + '</span>');
+
+            console.log("waitState: " + waitState);
+
+            if (waitState === false) {
+                showSelf(gamePlayerData);
+                makeGameRecordTable(gamePlayerData.hits.opponent, "gameRecordOppTable");
+                makeGameRecordTable(gamePlayerData.hits.self, "gameRecordSelfTable");
+            }
+
+            if (gamePlayerData.gameState === "PLACESHIPS"){
                 $('#placingShipsBoard').show('puff', 'slow');
             }
-            makeGameRecordTable(gamePlayerData.hits.opponent, "gameRecordOppTable");
-            makeGameRecordTable(gamePlayerData.hits.self, "gameRecordSelfTable");
+            if (gamePlayerData.gameState === "WAITINGFOROPP"){
+                $('#battleGrids').show('puff', 'slow');
+            }
+
+            if (gamePlayerData.gameState === "WON"){
+                showSelf(gamePlayerData);
+                makeGameRecordTable(gamePlayerData.hits.opponent, "gameRecordOppTable");
+                makeGameRecordTable(gamePlayerData.hits.self, "gameRecordSelfTable");
+                $('#battleGrids').show('puff', 'slow');
+                $('#gameRecordBlock').show('puff', 'slow');
+                console.log("yes you won");
+            }
+            if (gamePlayerData.gameState === "TIE"){
+                showSelf(gamePlayerData);
+                makeGameRecordTable(gamePlayerData.hits.opponent, "gameRecordOppTable");
+                makeGameRecordTable(gamePlayerData.hits.self, "gameRecordSelfTable");
+                $('#battleGrids').show('puff', 'slow');
+                $('#gameRecordBlock').show('puff', 'slow');
+                console.log("TIED MATCH");
+            }
+            if (gamePlayerData.gameState === "LOST"){
+                showSelf(gamePlayerData);
+                makeGameRecordTable(gamePlayerData.hits.opponent, "gameRecordOppTable");
+                makeGameRecordTable(gamePlayerData.hits.self, "gameRecordSelfTable");
+                $('#battleGrids').show('puff', 'slow');
+                $('#gameRecordBlock').show('puff', 'slow');
+                console.log("OH YOU LOST");
+            }
+            if (gamePlayerData.gameState === "WAIT"){
+                $('#battleGrids').show('puff', 'slow');
+                $('#salvoBlock').hide('puff', 'slow');
+                $('#gameRecordBlock').show('puff', 'slow');
+                waitState = true;
+                setTimeout(
+                    function()
+                    {
+                        refreshGameView(makeUrl());
+                        console.log("...refreshing gameview...");
+
+                    }, 5000);
+            }
+            if (gamePlayerData.gameState == "PLAY"){
+                showSelf(gamePlayerData);
+                makeGameRecordTable(gamePlayerData.hits.opponent, "gameRecordOppTable");
+                makeGameRecordTable(gamePlayerData.hits.self, "gameRecordSelfTable");
+
+                $('#salvoBlock').html('<div class="drag-zone">\n' +
+                    '                <div class="droppable salvoCharger caught--it" id="salvoout1"><div class="draggable" id="salvo1"></div></div>\n' +
+                    '                <div class="droppable salvoCharger caught--it" id="salvoout2"><div class="draggable" id="salvo2"></div></div>\n' +
+                    '                <div class="droppable salvoCharger caught--it" id="salvoout3"><div class="draggable" id="salvo3"></div></div>\n' +
+                    '                <div class="droppable salvoCharger caught--it" id="salvoout4"><div class="draggable" id="salvo4"></div></div>\n' +
+                    '                <div class="droppable salvoCharger caught--it" id="salvoout5"><div class="draggable" id="salvo5"></div></div>\n' +
+                    '                <div class="textCenter"><button class="btn btn-warning" id="postSalvo">Fire Salvo!</button></div>\n' +
+                    '            </div>');
+
+                resetSalvoCellIds();
+
+                $('#postSalvo').click(function () {
+                    makeSalvoJSON();
+                    if (salvoPositions.length === 0){
+                        $('#errorSalvo').text("Error! No salvos to fire! You must set at least one target!");
+                        $('#errorSalvo').show( "slow" ).delay(3000).hide( "slow" );
+                        console.log("No salvos to shoot!");
+                    } else {
+                        postSalvo(makePostUrlSalvoes());
+                    }
+                });
+
+                $('#battleGrids').show('puff', 'slow');
+                $('#salvoBlock').show('puff', 'slow');
+                $('#gameRecordBlock').show('puff', 'slow');
+            }
 
         },
         error: function(e){
@@ -115,35 +191,35 @@ function showSelf (gamePlayerData) {
 
     gamePlayerData.ships.forEach(function(ship) {
 
-        console.log(ship.type);
+        // console.log(ship.type);
         ship.locations.forEach(function(location) {
             var cellID = "#p1_" + location;
             $(cellID).addClass("shipCell");
-            console.log(location);
+       //     console.log(location);
         });
     });
 
     gamePlayerData.salvoes.forEach(function(salvo) {
 
-        console.log("Turn: " + salvo.turn);
+      //  console.log("Turn: " + salvo.turn);
         salvo.locations.forEach(function(location) {
             var cellID;
             if (salvo.player == youID){
                 cellID = "#" + location;
                 $(cellID).addClass("salvoCell");
 
-                console.log("Your salvo on " + location);
+        //        console.log("Your salvo on " + location);
                 $(cellID).text(salvo.turn);
             } else {
                 cellID = "#p1_" + location;
                 if ($(cellID).hasClass("shipCell")) {
                     $(cellID).addClass("hitCell");
 
-                    console.log("Opponent Hits Ship on " + location);
+          //          console.log("Opponent Hits Ship on " + location);
                 } else {
                     $(cellID).addClass("salvoCell");
                     $(cellID).text(salvo.turn);
-                    console.log("Opponent salvo on " + location);
+          //          console.log("Opponent salvo on " + location);
                 }
             }
 
@@ -215,7 +291,15 @@ function postShipLocations (postUrl) {
         .done(function (response) {
             console.log(response);
             $('#okShips').text(JSON.parse(response).OK);
-            $('#okShips').show( "slow" ).delay(4000).hide( "slow" );
+            $('#okShips').show( "slow" ).delay(3000).hide( "slow" );
+            setTimeout(
+                function()
+                {
+                    $('#placingShipsBoard').hide("slow");
+                    refreshGameView(makeUrl());
+
+                }, 4000);
+
         })
         .fail(function (response) {
             console.log(response);
@@ -233,13 +317,23 @@ function postSalvo (postUrl) {
     })
         .done(function (response) {
             console.log(response);
-            $('#okShips').text(JSON.parse(response).OK);
-            $('#okShips').show( "slow" ).delay(4000).hide( "slow" );
+            $('#okSalvo').text(JSON.parse(response).OK);
+            $('#okSalvo').show( "slow" ).delay(3000).hide( "slow" );
+            $('#salvoBlock').hide("slow");
+            $('.oppCell').removeClass('caught--it');
+            $('#salvoBlock').empty();
+            waitState = false;
+
+            setTimeout(
+                function()
+                {
+                    refreshGameView(makeUrl());
+                }, 4000);
         })
         .fail(function (response) {
             console.log(response);
-            $('#errorShips').text(JSON.parse(response.responseText).error);
-            $('#errorShips').show( "slow" ).delay(4000).hide( "slow" );
+            $('#errorSalvo').text(JSON.parse(response.responseText).error);
+            $('#errorSalvo').show( "slow" ).delay(4000).hide( "slow" );
         })
 }
 
@@ -250,14 +344,13 @@ function displayOverlay(text) {
         // "left": "0px",
         "width": "451px",
         "height": "451px",
-        "background-color": "rgba(133,43,0,.82)",
+        "background-color": "rgba(255,0,0,.89)",
         "z-index": "10000",
         "vertical-align": "middle",
         "text-align": "center",
         "color": "#fff",
-        "font-size": "40px",
-        "font-weight": "bold",
-        "cursor": "wait"
+        "font-size": "35px"
+
     }).appendTo(".gridShips").effect( "bounce", { times: 5 }, { distance: 20 }, "slow" );
 }
 
@@ -295,58 +388,96 @@ function makeSalvoJSON() {
 function makeGameRecordTable (hitsArray, gameRecordTableId) {
 
     var tableId = "#" + gameRecordTableId + " tbody";
+    $(tableId).empty();
     let shipsAfloat = 5;
+    let playerTag;
+    if (gameRecordTableId == "gameRecordOppTable") {
+        playerTag = "#opp";
+    }
+    if (gameRecordTableId == "gameRecordSelfTable") {
+        playerTag = "#";
+    }
+
     hitsArray.forEach(function (playTurn) {
         let hitsReport = "";
         if (playTurn.damages.carrierHits > 0){
-            hitsReport += "Carrier " + addDamagesIcons(playTurn.damages.carrierHits) + " ";
+            hitsReport += "Carrier " + addDamagesIcons(playTurn.damages.carrierHits, "hit") + " ";
             if (playTurn.damages.carrier === 5){
-                hitsReport += "Sunk!! ";
+                hitsReport += "SUNK! ";
+                $(playerTag + 'carrierIcon').html('<img src="img/carriersunk.png">');
                 shipsAfloat--;
             }
         }
         if (playTurn.damages.battleshipHits > 0){
-            hitsReport += "Battleship " + addDamagesIcons(playTurn.damages.battleshipHits) + " ";
+            hitsReport += "Battleship " + addDamagesIcons(playTurn.damages.battleshipHits, "hit") + " ";
             if (playTurn.damages.battleship === 4){
-                hitsReport += "Sunk!! ";
+                hitsReport += "SUNK! ";
+                $(playerTag + 'battleshipIcon').html('<img src="img/battleshipsunk.png">');
                 shipsAfloat--;
             }
         }
         if (playTurn.damages.submarineHits > 0){
-            hitsReport += "Submarine " + addDamagesIcons(playTurn.damages.submarineHits) + " ";
+            hitsReport += "Submarine " + addDamagesIcons(playTurn.damages.submarineHits, "hit") + " ";
             if (playTurn.damages.submarine === 3){
-                hitsReport += "Sunk!! ";
+                hitsReport += "SUNK! ";
+                $(playerTag + 'submarineIcon').html('<img src="img/submarinesunk.png">');
                 shipsAfloat--;
             }
         }
         if (playTurn.damages.destroyerHits > 0){
-            hitsReport += "Destroyer " + addDamagesIcons(playTurn.damages.destroyerHits) + " ";
+            hitsReport += "Destroyer " + addDamagesIcons(playTurn.damages.destroyerHits, "hit") + " ";
             if (playTurn.damages.destroyer === 3){
-                hitsReport += "Sunk!! ";
+                hitsReport += "SUNK! ";
+                $(playerTag + 'destoyerIcon').html('<img src="img/destoyersunk.png">');
                 shipsAfloat--;
             }
         }
         if (playTurn.damages.patrolboatHits > 0){
-            hitsReport += "Patrol Boat " + addDamagesIcons(playTurn.damages.patrolboatHits) + " ";
+            hitsReport += "Patrol Boat " + addDamagesIcons(playTurn.damages.patrolboatHits, "hit") + " ";
             if (playTurn.damages.patrolboat === 2){
-                hitsReport += "Sunk!! ";
+                hitsReport += "SUNK! ";
+                $(playerTag + 'patrolboatIcon').html('<img src="img/patrolboatsunk.png">');
                 shipsAfloat--;
             }
+        }
+
+        if (playTurn.missed > 0){
+            hitsReport +=  "Missed shots " + addDamagesIcons(playTurn.missed, "missed") + " ";
         }
 
         if (hitsReport === ""){
             hitsReport = "All salvoes missed! No damages!"
         }
-        $('<tr><td class="textCenter">' + playTurn.turn + '</td><td>' + hitsReport + '</td><td class="textCenter">' + shipsAfloat + '</td></tr>').prependTo(tableId);
+
+        $('<tr><td class="textCenter">' + playTurn.turn + '</td><td>' + hitsReport + '</td></tr>').prependTo(tableId);
+
     });
+    $('#shipsLeftSelfCount').text(shipsAfloat);
 }
 
-function addDamagesIcons (numberOfHits) {
+function addDamagesIcons (numberOfHits, hitOrMissed) {
     let damagesIcons = "";
-    for (var i = 0; i < numberOfHits; i++) {
-        damagesIcons += "<img class='hitblast' src='img/hitblast.png'>"
+    if (hitOrMissed === "missed") {
+        for (var i = 0; i < numberOfHits; i++) {
+            damagesIcons += "<img class='hitblast' src='img/missed.png'>"
+        }
+    }
+        if (hitOrMissed === "hit") {
+            for (var i = 0; i < numberOfHits; i++) {
+                damagesIcons += "<img class='hitblast' src='img/redhit.png'>"
+            }
     }
     return damagesIcons;
+}
+
+function getTurn(gamePlayerData) {
+    let turn;
+    if (gamePlayerData.hits.self.length < gamePlayerData.hits.opponent.length) {
+        turn = gamePlayerData.hits.opponent.length;
+    } else {
+        turn = gamePlayerData.hits.opponent.length + 1;
+    }
+    return turn;
 }
 
 

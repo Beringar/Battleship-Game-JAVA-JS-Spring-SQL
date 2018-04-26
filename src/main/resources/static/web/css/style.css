@@ -7,16 +7,65 @@ body {
     margin: 15px auto 0;
     text-align: center;
     background: #00000038;
-    border-radius: 20px;
+    border-top-left-radius: 20px;
+    border-top-right-radius: 20px;
+}
 
+.blockInline {
+    display: inline-block;
+    vertical-align: middle;
+    padding: 8px;
+}
+
+#gameStateBlock {
+
+    background-color: #212529;
+    padding: 3px;
+    margin-bottom: 4px;
+    border-bottom-left-radius: 20px;
+    border-bottom-right-radius: 20px;
+}
+
+.labelGame {
+    text-transform: uppercase;
+    color: #dee2e6;
+    font-size: 1.6em;
+    font-weight: 200;
+}
+.labelGameBig {
+    color: #f8f9fa;
+    font-weight: 600;
+    font-size: 1.6em;
+}
+
+#salvoBlock, #gameRecordBlock {
+    display: none;
+    margin-top: 10px;
+}
+
+.gridTopLabel {
+    text-transform: uppercase;
+    font-weight: 600;
+    margin: 0;
+    color: white;
+}
+
+.shipPoslabel {
+    font-weight: 200;
+    color: deepskyblue;
 }
 
 .bannerImage {
+    width: 85%;
+    margin-top: 8px;
+}
+
+.bannerImageGames {
     width: 50%;
     margin-top: 8px;
 }
 
-#loginFailed, #errorSignup, #errorShips {
+#loginFailed, #errorSignup, #errorShips, #errorSalvo {
     display: none;
     background-color: indianred;
     color: white;
@@ -30,56 +79,37 @@ body {
     padding: 10px;
 }
 
-#errorMsg{
+#errorMsg {
     display: none;
 }
 
-#loginSuccess, #logoutSuccess, #gameCreatedSuccess, #gameJoinedSuccess, #okShips {
+#loginSuccess, #logoutSuccess, #gameCreatedSuccess, #gameJoinedSuccess, #okShips, #okSalvo {
     display: none;
     background-color: forestgreen;
     color: white;
     padding: 10px;
 }
 
-/*#basicTable {
-    padding: 20px;
-    border: 1px;
-    padding: 0;
-    border-collapse: collapse;
-    width: 100%;
-}
-
-#basicTable td, th {
-    border: 1px;
-    border-style: solid;
-    border-color: #000;
-    padding: 3px;
-    text-align: center;
-    height: 30px;
-    width: 9.09%;
-}
-
-#basicTable th {
-    border: none;
-}*/
-
 #gamesList {
     width: 75%;
     margin: 0 auto;
     opacity: 0.9;
-
 }
 
-
+#gamesList tbody {
+    height: 200px;
+    overflow-y: auto;
+}
 
 #scoreBoard {
     width: 60%;
     margin: 0 auto;
     opacity: 0.9;
-
-
 }
 
+#currentPlayerName {
+
+}
 
 .shipCell {
     background-color: yellowgreen;
@@ -90,7 +120,6 @@ body {
     background-size: cover;
     /* background-color: #87cefa00; */
     color: white;
-
 }
 
 .hitCell {
@@ -98,8 +127,8 @@ body {
     background-size: cover;
 }
 
-#gamePlayerDetails {
-    padding: 20px;
+.verticalCenterFlex {
+    align-items: center;
 }
 
 .gridLabel {
@@ -138,20 +167,16 @@ body {
     text-align: center;
 }
 
-
 .gridShips {
     width: 451px;
     height: 451px;
     background-image: url(../img/backships.gif);
     margin: 0 auto;
     background-size: cover;
-
-
 }
 .title {
     text-align: center;
 }
-
 
 .rotateIcon {
     height: 15px;
@@ -174,10 +199,19 @@ body {
     background-image: url(../img/backships.gif);
     opacity: 0.82;
     border-radius: 8px;
-
-
     color: white;
 }
+
+.gameStateLabelBig {
+    font-size: 1.3em;
+    font-weight: 600;
+    color: #ffc107;
+}
+
+.gameStateLabel {
+    color: #dee2e6;
+}
+
 .divTableRow {
     display: table-row;
 }
@@ -185,6 +219,7 @@ body {
     background-color: #EEE;
     display: table-header-group;
 }
+
 .divTableCell, .divTableHead {
     border: 1px dashed #6786ff;
     border-left-width: 0;
@@ -196,16 +231,19 @@ body {
     line-height: 40px;
     text-align: center;
 }
+
 .divTableHeading {
     background-color: #EEE;
     display: table-header-group;
     font-weight: bold;
 }
+
 .divTableFoot {
     background-color: #EEE;
     display: table-footer-group;
     font-weight: bold;
 }
+
 .divTableBody {
     display: table-row-group;
 }
@@ -234,16 +272,12 @@ button:focus {
     width: 20%;
 }
 
-.columnShipsLeft {
-    width: 20%;
-}
-
 .columnDamages {
-    width: 60%;
+    width: 80%;
 }
 
 .hitblast {
-    width: 30px;
+    width: 12px;
 }
 
 #placingShipsBoard {
@@ -256,12 +290,13 @@ button:focus {
 }
 
 #gameRecordOppTable, #gameRecordSelfTable {
-    opacity: 0.7;
+    opacity: 0.8;
 }
 
 .table td, .table th {
     vertical-align: middle;
-    padding: .55rem;
+    padding: .25rem;
+    font-weight: 200;
 }
 
 .form-inline > * {
@@ -271,7 +306,6 @@ button:focus {
 #login-form {
     justify-content: flex-end;
     color: white;
-
 }
 
 #username, #password {
@@ -320,16 +354,85 @@ button:focus {
     margin: 10px auto 10px;
     font-size: 1.2em;
     color: white;
-
 }
 
 #save-grid {
     font-size: 1.3em;
 }
 
-/*
-.battleGrids {
+#battleGrids {
     display: none;
 }
 
-*/
+.movingMsgBig {
+    margin-top: 25px;
+    font-size: 2.5em;
+    font-weight: 600;
+    text-transform: uppercase;
+    line-height: 1em;
+}
+
+.defcon5 {
+    color:green;
+    font-size: 1.3em;
+    font-weight: 800;
+}
+
+.defcon4 {
+    color: #789c00;
+    font-size: 1.3em;
+    font-weight: 800;
+}
+
+.defcon3 {
+    color: yellow;
+    font-size: 1.3em;
+    font-weight: 800;
+}
+
+.defcon2 {
+    color: orange;
+    font-size: 1.3em;
+    font-weight: 800;
+}
+
+.defcon1 {
+    color: indianred;
+    font-size: 1.3em;
+    font-weight: 800;
+}
+
+.defcon0 {
+    color: red;
+    font-size: 1.3em;
+    font-weight: 800;
+}
+
+#shipsLeftIcons, #shipsLeftIconsOpp {
+    margin-bottom: 8px;
+}
+
+@media (min-width: 930px) {
+    .col-sm-6 {
+        -webkit-box-flex: 0;
+        -ms-flex: 0 0 50%;
+        flex: 0 0 50%;
+        max-width: 50%;
+    }
+}
+
+@media (max-width: 929px) and (min-width: 576px) {
+    .col-sm-6 {
+
+        position: relative;
+        width: 100%;
+        min-height: 1px;
+        padding-right: 15px;
+        padding-left: 15px;
+        -webkit-box-flex: unset;
+        flex: none;
+        max-width: unset;
+    }
+}
+
+

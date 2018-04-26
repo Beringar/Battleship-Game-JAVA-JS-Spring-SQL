@@ -1,6 +1,6 @@
 package beringar.salvo;
 
-public enum gameState {
+public enum GameState {
     WAITINGFOROPP,
     WAIT,
     PLAY,

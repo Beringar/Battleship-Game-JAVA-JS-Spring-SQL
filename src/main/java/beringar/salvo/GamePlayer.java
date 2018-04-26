@@ -19,6 +19,7 @@ public class GamePlayer {
 
     private Date joinDate;
 
+
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name="player_id")
     private Player playerPlay;
@@ -60,16 +61,6 @@ public class GamePlayer {
         this.playerPlay = player;
     }
 
-    @Override
-    public String toString() {
-        return "GamePlayer{" +
-                "id=" + id +
-                ", joinDate=" + joinDate +
-                ", playerPlay=" + playerPlay +
-                ", gamePlay=" + gamePlay +
-                ", ships=" + ships +
-                '}';
-    }
 
     public Date getJoinDate() {
         return joinDate;
@@ -101,6 +92,5 @@ public class GamePlayer {
         return id;
     }
 
-
-
+    public void addSalvo(Salvo salvo) {this.salvoes.add(salvo);}
 }

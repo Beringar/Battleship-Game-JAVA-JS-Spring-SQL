@@ -185,7 +185,7 @@ function showGamesTable(gamesData) {
 
             let DateCreated = new Date(gamesData[i].created);
             DateCreated = DateCreated.getMonth() + 1 + "/" + DateCreated.getDate() + " " + DateCreated.getHours() + ":" + DateCreated.getMinutes();
-            let row = $('<tr></tr>').appendTo(table);
+            let row = $('<tr></tr>').prependTo(table);
             $('<td class="textCenter">' + gamesData[i].id + '</td>').appendTo(row);
             $('<td>' + DateCreated + '</td>').appendTo(row);
 

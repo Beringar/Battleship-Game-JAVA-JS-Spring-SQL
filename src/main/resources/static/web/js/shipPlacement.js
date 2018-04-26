@@ -4,6 +4,7 @@ var submarine = "submarine";
 var destroyer = "destroyer";
 var patrolboat = "patrolboat";
 var grid;
+var notMoved = "";
 
 var positions;
 var shipsJSON;
@@ -45,15 +46,15 @@ $(function () {
 
 	// language=HTML
     grid.addWidget($('<div id="carrier"><div class="grid-stack-item-content"><button class="rotateButton" onclick="rotate(carrier)"><img class="rotateIcon" src="img/rotate.png"></button></div><div/>'),
-		1, 1, 5, 1, false, 1, 5, 1, 5, "carrier");
+		3, 8, 5, 1, false, 1, 5, 1, 5, "carrier");
 	grid.addWidget($('<div id="battleship"><div class="grid-stack-item-content"><button class="rotateButton" onclick="rotate(battleship)"><img class="rotateIcon" src="img/rotate.png"></button></div><div/>'),
-		1, 1, 4, 1, false, 1, 4, 1, 4, "battleship");
+		5, 1, 4, 1, false, 1, 4, 1, 4, "battleship");
 	grid.addWidget($('<div id="submarine"><div class="grid-stack-item-content"><button class="rotateButton" onclick="rotate(submarine)"><img class="rotateIcon" src="img/rotate.png"></button></div><div/>'),
-		1, 1, 3, 1, false, 1, 3, 1, 3, "submarine");
+		1, 5, 3, 1, false, 1, 3, 1, 3, "submarine");
 	grid.addWidget($('<div id="destroyer"><div class="grid-stack-item-content"><button class="rotateButton" onclick="rotate(destroyer)"><img class="rotateIcon" src="img/rotate.png"></button></div><div/>'),
-		1, 1, 1, 3, false, 1, 3, 1, 3, "destroyer");
+		7, 3, 1, 3, false, 1, 3, 1, 3, "destroyer");
 	grid.addWidget($('<div id="patrolboat"><div class="grid-stack-item-content"><button class="rotateButton" onclick="rotate(patrolboat)"><img class="rotateIcon" src="img/rotate.png"></button></div><div/>'),
-		1, 1, 1, 2, false, 1, 2, 1, 2, "patrolBoat");
+		1, 1, 1, 2, false, 1, 2, 1, 2, "patrolboat");
 
 	// $('.iii').draggable({
 	// 	revert: 'invalid',
@@ -87,9 +88,11 @@ function rotate(ship) {
 	currentY = Number($(shipID).attr('data-gs-y'));
 	if ((currentHeight == 1) && (grid.isAreaEmpty(currentX, currentY + 1, 1, currentWidth - 1)) && ((currentY + (currentWidth - 1)) < 10)) {
 		grid.update($(shipID), currentX, currentY, currentHeight, currentWidth);
+        $('.movingMsgBig').html(ship + "<br>rotated to<br> vertical!");
 		console.log("x: " + currentX + " y: " + currentY + " w: " + currentHeight + " h: " + currentWidth);
 	} else if ((currentWidth == 1) && (grid.isAreaEmpty(currentX + 1, currentY, currentHeight - 1, 1)) && ((currentX + (currentHeight - 1)) < 10)) {
 		grid.update($(shipID), currentX, currentY, currentHeight, currentWidth);
+        $('.movingMsgBig').html(ship + "<br>rotated to<br> horizontal!");
 		console.log("x: " + currentX + " y: " + currentY + " w: " + currentHeight + " h: " + currentWidth);
 	} else {
         var msg = "Illegal position. Collision or out of board!";
@@ -138,10 +141,61 @@ function renderPositions(positions) {
 	shipsJSON = JSON.stringify(shipData);
 }
 
-var shipPositionMsg = function(items) {
-    console.log(items[0].id + " " + items[0].x + " " + items[0].y);
-};
+
+
+function shipPositionMsg(ship) {
+
+    let shipPosition = [];
+    shipPositionMsgRendered = "";
+    firstRowPosition = String.fromCharCode(65 + (ship.y));
+    firstColPosition = ship.x + 1;
+    shipPosition.push(firstRowPosition + firstColPosition);
+    var nextRow;
+    var nextCol;
+    if (ship.width == 1) {
+        for (var j = 1; j < ship.height; j++) {
+            nextRow = String.fromCharCode(65 + (ship.y) + j);
+            nextCol = firstColPosition;
+            shipPosition.push(nextRow + nextCol);
+        }
+    }
+    if (ship.height == 1) {
+        for (var j = 1; j < ship.width; j++) {
+            nextRow = String.fromCharCode(65 + (ship.y));
+            nextCol = firstColPosition + j;
+            shipPosition.push(nextRow + nextCol);
+        }
+    }
+    for (var i = 0; i < shipPosition.length; i++){
+        shipPositionMsgRendered += shipPosition[i] + " ";
+    }
+
+    return shipPositionMsgRendered;
+}
 
 $('#grid1').on('change', function(event, items) {
-    shipPositionMsg(items);
+    items.forEach(function(ship) {
+        var shipLocation = shipPositionMsg(ship);
+        $('#' + ship.id + 'Position').text(shipLocation).removeClass('movingShip');
+
+   });
+    console.log(items);
 });
+
+$('#grid1').on('dragstart', function(event, ui) {
+    notMoved = $('#' + event.target.id + 'Position').text();
+    $('.movingMsgBig').html("..." + event.target.id + "<br>is moving...");
+    $('#' + event.target.id + 'Position').text("waiting new position").addClass('movingShip');
+
+});
+
+$('#grid1').on('dragstop', function(event, ui) {
+
+    $('.movingMsgBig').html(event.target.id + "<br>relocated!");
+    $('#' + event.target.id + 'Position').text(notMoved).removeClass('movingShip');
+
+
+
+});
+
+
