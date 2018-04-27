@@ -191,6 +191,14 @@ function showSelf (gamePlayerData) {
 
     gamePlayerData.ships.forEach(function(ship) {
 
+        let firstCellID;
+        firstCellID = "#p1_" + ship.locations[0];
+        if (ship.locations[0].substring(1) === ship.locations[1].substring(1)) {
+            $(firstCellID).html('<img class="shipsImgOnSelfGridVer" src="img/' + ship.type + 'Ver.png">');
+                } else {
+            $(firstCellID).html('<img class="shipsImgOnSelfGridHor" src="img/' + ship.type + 'Hor.png">');
+        }
+
         // console.log(ship.type);
         ship.locations.forEach(function(location) {
             var cellID = "#p1_" + location;
@@ -217,7 +225,7 @@ function showSelf (gamePlayerData) {
 
           //          console.log("Opponent Hits Ship on " + location);
                 } else {
-                    $(cellID).addClass("salvoCell");
+                    $(cellID).addClass("salvoCellSelf");
                     $(cellID).text(salvo.turn);
           //          console.log("Opponent salvo on " + location);
                 }

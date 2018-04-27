@@ -47,7 +47,6 @@ body {
     text-transform: uppercase;
     font-weight: 600;
     margin: 0;
-    color: white;
 }
 
 .shipPoslabel {
@@ -112,7 +111,7 @@ body {
 }
 
 .shipCell {
-    background-color: yellowgreen;
+    /*background-color: yellowgreen;*/
 }
 
 .salvoCell {
@@ -120,6 +119,13 @@ body {
     background-size: cover;
     /* background-color: #87cefa00; */
     color: white;
+}
+
+.salvoCellSelf {
+    background-image: url(../img/targetself.png);
+    background-size: cover;
+    /* background-color: #87cefa00; */
+    color: #888888;
 }
 
 .hitCell {
@@ -232,16 +238,10 @@ body {
 
 /* DivTable.com */
 .divTable{
-
     display: table;
     width: 440px;
     margin: 0 auto;
-
     background-size: cover;
-    background-image: url(../img/backships.gif);
-    opacity: 0.82;
-    border-radius: 8px;
-    color: white;
 }
 
 .gameStateLabelBig {
@@ -475,6 +475,39 @@ button:focus {
         flex: none;
         max-width: unset;
     }
+}
+
+.shipsImgOnSelfGridVer {
+    position: absolute;
+    width: 40px;
+    margin-left: -20px;
+}
+
+.shipsImgOnSelfGridHor {
+    position: absolute;
+    height: 40px;
+    margin-left: -20px;
+}
+
+.selfTable {
+    background-image: url(../img/backshipplacement.gif);
+    opacity: 0.9;
+    color: #888888;
+    font-size: 0.8em;
+}
+
+.oppTable {
+    background-image: url(../img/backships.gif);
+    opacity: 0.9;
+    color: #d8dce0;
+    font-size: 0.8em;
+}
+
+.selfTdCell {
+    border: 1px dashed #eab105;
+    border-left-width: 0;
+    border-top-width: 0;
+
 }
 
 
