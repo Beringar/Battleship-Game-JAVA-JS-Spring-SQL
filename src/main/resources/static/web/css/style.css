@@ -329,6 +329,7 @@ button:focus {
     margin: 0 auto;
     padding: 25px;
     border-radius: 1.5em;
+    margin-top: 15px;
 }
 
 #gameRecordOppTable, #gameRecordSelfTable {
