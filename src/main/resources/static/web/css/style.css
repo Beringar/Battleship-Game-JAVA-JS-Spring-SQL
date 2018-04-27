@@ -165,43 +165,43 @@ body {
 }
 
 .carrierHor {
-    background-image: url(../img/carrierHor.png);
+    background-image: url(../img/carrierhor.png);
 }
 
 .carrierVer {
-    background-image: url(../img/carrierVer.png);
+    background-image: url(../img/carrierver.png);
 }
 
 .battleshipHor {
-    background-image: url(../img/battleshipHor.png);
+    background-image: url(../img/battleshiphor.png);
 }
 
 .battleshipVer {
-    background-image: url(../img/battleshipVer.png);
+    background-image: url(../img/battleshipver.png);
 }
 
 .submarineHor {
-    background-image: url(../img/submarineHor.png);
+    background-image: url(../img/submarinehor.png);
 }
 
 .submarineVer {
-    background-image: url(../img/submarineVer.png);
+    background-image: url(../img/submarinever.png);
 }
 
 .destroyerHor {
-    background-image: url(../img/destroyerHor.png);
+    background-image: url(../img/destroyerhor.png);
 }
 
 .destroyerVer {
-    background-image: url(../img/destroyerVer.png);
+    background-image: url(../img/destroyerver.png);
 }
 
 .patrolboatHor {
-    background-image: url(../img/patrolboatHor.png);
+    background-image: url(../img/patrolboathor.png);
 }
 
 .patrolboatVer {
-    background-image: url(../img/patrolboatVer.png);
+    background-image: url(../img/patrolboatver.png);
 }
 
 .sidebar {

@@ -194,11 +194,10 @@ function showSelf (gamePlayerData) {
         let firstCellID;
         firstCellID = "#p1_" + ship.locations[0];
         if (ship.locations[0].substring(1) === ship.locations[1].substring(1)) {
-            $(firstCellID).html('<img class="shipsImgOnSelfGridVer" src="img/' + ship.type + 'Ver.png">');
+            $(firstCellID).html('<img class="shipsImgOnSelfGridVer" src="img/' + ship.type + 'ver.png">');
                 } else {
-            $(firstCellID).html('<img class="shipsImgOnSelfGridHor" src="img/' + ship.type + 'Hor.png">');
+            $(firstCellID).html('<img class="shipsImgOnSelfGridHor" src="img/' + ship.type + 'hor.png">');
         }
-
         // console.log(ship.type);
         ship.locations.forEach(function(location) {
             var cellID = "#p1_" + location;
@@ -416,6 +415,7 @@ function makeGameRecordTable (hitsArray, gameRecordTableId) {
                 shipsAfloat--;
             }
         }
+
         if (playTurn.damages.battleshipHits > 0){
             hitsReport += "Battleship " + addDamagesIcons(playTurn.damages.battleshipHits, "hit") + " ";
             if (playTurn.damages.battleship === 4){
