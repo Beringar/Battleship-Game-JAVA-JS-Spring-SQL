@@ -52,7 +52,7 @@ body {
 
 .shipPoslabel {
     font-weight: 200;
-    color: deepskyblue;
+    color: #ffc107;
 }
 
 .bannerImage {
@@ -150,14 +150,52 @@ body {
 }
 
 .grid-stack-item-content {
-    color: #2c3e50;
-    background-color: #9acd33;
-    opacity: 0.8;
-    border-radius: 20px;
-    border: 1px solid #208437;
+    opacity: 0.9;
+    background-size: 100%;
+    background-repeat: no-repeat;
     cursor: -webkit-grab;
-    cursor:    -moz-grab;
-    cursor:         grab;
+    cursor: -moz-grab;
+    cursor: grab;
+}
+
+.carrierHor {
+    background-image: url(../img/carrierHor.png);
+}
+
+.carrierVer {
+    background-image: url(../img/carrierVer.png);
+}
+
+.battleshipHor {
+    background-image: url(../img/battleshipHor.png);
+}
+
+.battleshipVer {
+    background-image: url(../img/battleshipVer.png);
+}
+
+.submarineHor {
+    background-image: url(../img/submarineHor.png);
+}
+
+.submarineVer {
+    background-image: url(../img/submarineVer.png);
+}
+
+.destroyerHor {
+    background-image: url(../img/destroyerHor.png);
+}
+
+.destroyerVer {
+    background-image: url(../img/destroyerVer.png);
+}
+
+.patrolboatHor {
+    background-image: url(../img/patrolboatHor.png);
+}
+
+.patrolboatVer {
+    background-image: url(../img/patrolboatVer.png);
 }
 
 .sidebar {
@@ -173,6 +211,10 @@ body {
     background-image: url(../img/backships.gif);
     margin: 0 auto;
     background-size: cover;
+}
+
+.backShipPlacement {
+    background-image: url(../img/backshipplacement.gif);
 }
 .title {
     text-align: center;

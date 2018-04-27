@@ -45,15 +45,15 @@ $(function () {
 
 
 	// language=HTML
-    grid.addWidget($('<div id="carrier"><div class="grid-stack-item-content"><button class="rotateButton" onclick="rotate(carrier)"><img class="rotateIcon" src="img/rotate.png"></button></div><div/>'),
+    grid.addWidget($('<div id="carrier"><div id="carrierHandler" class="grid-stack-item-content carrierHor"><button class="rotateButton" onclick="rotate(carrier)"><img class="rotateIcon" src="img/rotate.png"></button></div><div/>'),
 		3, 8, 5, 1, false, 1, 5, 1, 5, "carrier");
-	grid.addWidget($('<div id="battleship"><div class="grid-stack-item-content"><button class="rotateButton" onclick="rotate(battleship)"><img class="rotateIcon" src="img/rotate.png"></button></div><div/>'),
+	grid.addWidget($('<div id="battleship"><div id="battleshipHandler" class="grid-stack-item-content battleshipHor"><button class="rotateButton" onclick="rotate(battleship)"><img class="rotateIcon" src="img/rotate.png"></button></div><div/>'),
 		5, 1, 4, 1, false, 1, 4, 1, 4, "battleship");
-	grid.addWidget($('<div id="submarine"><div class="grid-stack-item-content"><button class="rotateButton" onclick="rotate(submarine)"><img class="rotateIcon" src="img/rotate.png"></button></div><div/>'),
+	grid.addWidget($('<div id="submarine"><div id="submarineHandler" class="grid-stack-item-content submarineHor"><button class="rotateButton" onclick="rotate(submarine)"><img class="rotateIcon" src="img/rotate.png"></button></div><div/>'),
 		1, 5, 3, 1, false, 1, 3, 1, 3, "submarine");
-	grid.addWidget($('<div id="destroyer"><div class="grid-stack-item-content"><button class="rotateButton" onclick="rotate(destroyer)"><img class="rotateIcon" src="img/rotate.png"></button></div><div/>'),
+	grid.addWidget($('<div id="destroyer"><div id="destroyerHandler" class="grid-stack-item-content destroyerHor destroyerVer"><button class="rotateButton" onclick="rotate(destroyer)"><img class="rotateIcon" src="img/rotate.png"></button></div><div/>'),
 		7, 3, 1, 3, false, 1, 3, 1, 3, "destroyer");
-	grid.addWidget($('<div id="patrolboat"><div class="grid-stack-item-content"><button class="rotateButton" onclick="rotate(patrolboat)"><img class="rotateIcon" src="img/rotate.png"></button></div><div/>'),
+	grid.addWidget($('<div id="patrolboat"><div id="patrolboatHandler" class="grid-stack-item-content patrolboatHor patrolboatVer"><button class="rotateButton" onclick="rotate(patrolboat)"><img class="rotateIcon" src="img/rotate.png"></button></div><div/>'),
 		1, 1, 1, 2, false, 1, 2, 1, 2, "patrolboat");
 
 	// $('.iii').draggable({
@@ -86,12 +86,15 @@ function rotate(ship) {
 	currentHeight = Number($(shipID).attr('data-gs-height'));
 	currentX = Number($(shipID).attr('data-gs-x'));
 	currentY = Number($(shipID).attr('data-gs-y'));
+	verticalClass = ship + "Ver";
 	if ((currentHeight == 1) && (grid.isAreaEmpty(currentX, currentY + 1, 1, currentWidth - 1)) && ((currentY + (currentWidth - 1)) < 10)) {
 		grid.update($(shipID), currentX, currentY, currentHeight, currentWidth);
+		$(shipID + 'Handler').addClass(verticalClass);
         $('.movingMsgBig').html(ship + "<br>rotated to<br> vertical!");
 		console.log("x: " + currentX + " y: " + currentY + " w: " + currentHeight + " h: " + currentWidth);
 	} else if ((currentWidth == 1) && (grid.isAreaEmpty(currentX + 1, currentY, currentHeight - 1, 1)) && ((currentX + (currentHeight - 1)) < 10)) {
 		grid.update($(shipID), currentX, currentY, currentHeight, currentWidth);
+        $(shipID + 'Handler').removeClass(verticalClass);
         $('.movingMsgBig').html(ship + "<br>rotated to<br> horizontal!");
 		console.log("x: " + currentX + " y: " + currentY + " w: " + currentHeight + " h: " + currentWidth);
 	} else {

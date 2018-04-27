@@ -173,7 +173,7 @@ textarea {
 
 .movingShip {
     animation: grow .75s ease infinite;
-    color: #eec800 !important;
+    color: deepskyblue !important;
     text-align: center;
     font-weight: 600 !important;
 }

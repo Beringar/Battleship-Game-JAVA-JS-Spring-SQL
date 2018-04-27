@@ -15,7 +15,7 @@
 }
 
 .grid-stack .grid-stack-placeholder > .placeholder-content {
-  border: 1px dashed lightgray;
+  border: 1px dashed dimgrey;
   margin: 0;
   position: absolute;
   top: 0;
@@ -25,6 +25,7 @@
   width: auto;
   z-index: 0 !important;
   text-align: center;
+  border-radius: 15px;
 }
 
 .grid-stack > .grid-stack-item {
@@ -66,7 +67,7 @@
 .grid-stack > .grid-stack-item.ui-draggable-dragging > .grid-stack-item-content,
 .grid-stack > .grid-stack-item.ui-draggable-dragging > .grid-stack-item-content, .grid-stack > .grid-stack-item.ui-resizable-resizing > .grid-stack-item-content,
 .grid-stack > .grid-stack-item.ui-resizable-resizing > .grid-stack-item-content {
-  box-shadow: 1px 4px 6px rgba(0, 0, 0, 0.2);
+  /*box-shadow: 1px 4px 6px rgba(0, 0, 0, 0.2);*/
   opacity: 0.8;
 }
 
