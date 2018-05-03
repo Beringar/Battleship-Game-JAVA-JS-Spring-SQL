@@ -37,7 +37,7 @@ public class SalvoApplication {
     @Bean
     public CommandLineRunner initData(PlayerRepository playerRepo, GameRepository gameRepo, GamePlayerRepository gamePlayerRepo, ShipRepository shipRepo, SalvoRepository salvoRepo, ScoreRepository scoreRepo) {
         return (String... args) -> {
-            
+
 
             System.out.println("Hello Salvo Beringar!");
         };
