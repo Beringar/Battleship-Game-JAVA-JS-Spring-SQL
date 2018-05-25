@@ -354,17 +354,20 @@ function postSalvo (postUrl) {
 
 function displayOverlay(text) {
     $("<table id='overlay'><tbody><tr><td>" + text + "<br><button class='btn btn-info' onclick='removeOverlay()'>Ok! I got it.</button> </td></tr></tbody></table>").css({
-        "position": "relative",
-        "top": "0px",
-        // "left": "0px",
-        "width": "451px",
-        "height": "451px",
+        "position": "absolute",
+        "margin": "auto",
+        "top": "0",
+        "right": "0",
+        "left": "0",
+        "bottom": "0",
+        "width": "350px",
+        "height": "200px",
         "background-color": "rgba(255,0,0,.89)",
         "z-index": "10000",
         "vertical-align": "middle",
         "text-align": "center",
         "color": "#fff",
-        "font-size": "35px"
+        "font-size": "24px"
 
     }).appendTo(".gridShips").effect( "bounce", { times: 5 }, { distance: 20 }, "slow" );
 }
