@@ -368,7 +368,6 @@ function displayOverlay(text) {
         "text-align": "center",
         "color": "#fff",
         "font-size": "24px"
-
     }).appendTo(".gridShips").effect( "bounce", { times: 5 }, { distance: 20 }, "slow" );
 }
 
