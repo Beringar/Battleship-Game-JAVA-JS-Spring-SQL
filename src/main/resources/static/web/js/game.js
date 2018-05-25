@@ -354,7 +354,7 @@ function postSalvo (postUrl) {
 
 function displayOverlay(text) {
     $("<table id='overlay'><tbody><tr><td>" + text + "<br><button class='btn btn-info' onclick='removeOverlay()'>Ok! I got it.</button> </td></tr></tbody></table>").css({
-        "position": "absolute",
+        "position": "relative",
         "top": "0px",
         // "left": "0px",
         "width": "451px",
