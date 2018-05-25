@@ -360,7 +360,7 @@ function displayOverlay(text) {
         "right": "0",
         "left": "0",
         "bottom": "0",
-        "width": "350px",
+        "width": "80%",
         "height": "200px",
         "background-color": "rgba(255,0,0,.89)",
         "z-index": "10000",
@@ -368,7 +368,7 @@ function displayOverlay(text) {
         "text-align": "center",
         "color": "#fff",
         "font-size": "24px"
-    }).appendTo(".gridShips").effect( "bounce", { times: 5 }, { distance: 20 }, "slow" );
+    }).appendTo(".gridShips").show( "slow" );
 }
 
 function removeOverlay() {
