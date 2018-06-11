@@ -221,21 +221,24 @@ public class SalvoRESTController {
             return new ResponseEntity<>(makeMap("error", "You can't join a Game if You're Not Logged In! Please Log in or Sign Up for a new player account."), HttpStatus.UNAUTHORIZED);
         }
 
+
+        Game gameToJoin = gameRepository.getOne(gameID);
+
+        // assert (gameToJoin != null);
+
         if (gameRepository.getOne(gameID) == null) {
                 return new ResponseEntity<>(makeMap("error", "No such game."), HttpStatus.FORBIDDEN);
         }
 
-        Game gameToJoin = gameRepository.getOne(gameID);
         Integer gamePlayersCount = gameToJoin.getGamePlayers().size();
 
         if (gamePlayersCount == 1) {
             GamePlayer newGameplayer = gamePlayerRepository.save(new GamePlayer(gameToJoin, getLoggedPlayer(authentication)));
             return new ResponseEntity<>(makeMap("gpid", newGameplayer.getId()), HttpStatus.CREATED);
-        }
-        if (gamePlayersCount == 2) {
+        } else {
             return new ResponseEntity<>(makeMap("error", "Game is full!"), HttpStatus.FORBIDDEN);
         }
-        throw new RuntimeException("shflghfg");
+
     }
 
     @RequestMapping(path = "/games/players/{gamePlayerID}/ships", method = RequestMethod.POST)
@@ -335,6 +338,25 @@ public class SalvoRESTController {
         }
         return opponentGameplayer;
     }
+
+    private GamePlayer getOpponent(GamePlayer gp){
+        GamePlayer opponentGameplayer = new GamePlayer();
+
+        Long currentGpID = gp.getId();
+
+        for (GamePlayer gamePlayer : gp.getGame().getGamePlayers()) {
+
+            Long opGpToCompare = gamePlayer.getId();
+            if (opGpToCompare != currentGpID) {
+                opponentGameplayer = gamePlayer;
+            }
+        }
+        return opponentGameplayer;
+    }
+
+
+
+
 
     private List<Map> getHits(GamePlayer gamePlayer, GamePlayer opponentGameplayer) {
 

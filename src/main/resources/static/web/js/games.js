@@ -1,3 +1,9 @@
+/*
+SALVO GAME 'Games List' JS Code
+developed by Berenguer Pou / Ubiqum Barcelona (berenguer@ubiqum.com)
+Last update: June, 11, 2018
+*/
+
 let data;
 let gamesData;
 let playersArray;
