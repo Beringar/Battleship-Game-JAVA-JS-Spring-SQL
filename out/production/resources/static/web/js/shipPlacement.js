@@ -9,6 +9,8 @@ var notMoved = "";
 var positions;
 var shipsJSON;
 
+
+
 $('#save-grid').click(function () {
 	grid.saveGrid();
 	renderPositions(positions);
@@ -178,6 +180,7 @@ $('#grid1').on('change', function(event, items) {
     items.forEach(function(ship) {
         var shipLocation = shipPositionMsg(ship);
         $('#' + ship.id + 'Position').text(shipLocation).removeClass('movingShip');
+
    });
     console.log(items);
 });

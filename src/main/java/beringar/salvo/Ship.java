@@ -1,6 +1,8 @@
 package beringar.salvo;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -21,6 +23,7 @@ public class Ship {
     @JsonIgnore
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name="gamePlayer_id")
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private GamePlayer gamePlayer;
 
     @ElementCollection

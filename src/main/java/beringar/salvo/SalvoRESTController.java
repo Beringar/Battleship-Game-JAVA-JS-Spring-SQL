@@ -250,6 +250,10 @@ public class SalvoRESTController {
         if (gamePlayerToPlaceShips.getShips().size() >= 5) {
             return new ResponseEntity<>(makeMap("error", "Error: Your ships are already placed!"), HttpStatus.UNAUTHORIZED);
         }
+
+        if (ships.size() < 5) {
+            return new ResponseEntity<>(makeMap("error", "Error: You have to place all your ships!"), HttpStatus.UNAUTHORIZED);
+        }
         for (Ship item : ships) {
             item.setGamePlayerPlay(gamePlayerToPlaceShips);
             shipRepository.save(item);
@@ -529,7 +533,7 @@ public class SalvoRESTController {
         if (player.getShips().size() == 0) {
             return GameState.PLACESHIPS;
         }
-        if (player.getGame().getGamePlayers().size() == 1){
+        if (player.getGame().getGamePlayers().size() == 1) {
             return GameState.WAITINGFOROPP;
         }
         if (player.getGame().getGamePlayers().size() == 2) {
