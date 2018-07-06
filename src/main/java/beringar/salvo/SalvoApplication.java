@@ -40,18 +40,6 @@ public class SalvoApplication {
 
 
             System.out.println("Hello Salvo Beringar!");
-            Player john = new Player("john@gmail.com", "123456");
-            playerRepo.save(john);
-            Player lucy = new Player("lucy@gmail.com", "123456");
-            playerRepo.save(lucy);
-            Game gameTest = new Game();
-            gameRepo.save(gameTest);
-            GamePlayer gpTest = new GamePlayer(gameTest, john);
-            gamePlayerRepo.save(gpTest);
-            Score scorejohn = new Score(gameTest, john, 1.0);
-            Score scorelucy = new Score(gameTest, lucy, 0.0);
-            scoreRepo.save(scorejohn);
-            scoreRepo.save(scorelucy);
         };
     }
 }
