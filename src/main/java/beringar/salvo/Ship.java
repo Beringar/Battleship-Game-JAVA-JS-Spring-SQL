@@ -23,7 +23,6 @@ public class Ship {
     @JsonIgnore
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name="gamePlayer_id")
-    @OnDelete(action = OnDeleteAction.CASCADE)
     private GamePlayer gamePlayer;
 
     @ElementCollection

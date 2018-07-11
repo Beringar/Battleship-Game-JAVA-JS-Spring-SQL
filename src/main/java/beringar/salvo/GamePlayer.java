@@ -24,12 +24,10 @@ public class GamePlayer {
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name="player_id")
-    @OnDelete(action = OnDeleteAction.CASCADE)
     private Player playerPlay;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name="game_id")
-    @OnDelete(action = OnDeleteAction.CASCADE)
     private Game gamePlay;
 
     @OneToMany(mappedBy="gamePlayer", fetch=FetchType.EAGER)

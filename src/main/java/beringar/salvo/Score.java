@@ -24,12 +24,10 @@ public class Score {
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name="player_id")
-    @OnDelete(action = OnDeleteAction.CASCADE)
     private Player player;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name="game_id")
-    @OnDelete(action = OnDeleteAction.CASCADE)
     private Game game;
 
 
