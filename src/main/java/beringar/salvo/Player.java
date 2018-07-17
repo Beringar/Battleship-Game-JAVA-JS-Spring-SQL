@@ -3,6 +3,8 @@ package beringar.salvo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 import org.springframework.data.repository.query.Param;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -24,10 +26,12 @@ public class Player {
     private String password;
 
     @OneToMany(mappedBy="playerPlay", fetch=FetchType.EAGER)
+
     @Fetch(value = FetchMode.SUBSELECT)
     private List<GamePlayer> gamePlayers = new ArrayList<>();
 
     @OneToMany(mappedBy="player", fetch=FetchType.EAGER)
+
     @Fetch(value = FetchMode.SUBSELECT)
     private List<Score> scores = new ArrayList<>();
 

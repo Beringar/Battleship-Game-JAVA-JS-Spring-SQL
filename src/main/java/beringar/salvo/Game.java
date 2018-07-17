@@ -3,6 +3,8 @@ package beringar.salvo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 import java.util.*;
@@ -17,11 +19,13 @@ public class Game {
 
     private Date creationDate;
 
-    @OneToMany(mappedBy="gamePlay", fetch=FetchType.EAGER)
+    @OneToMany(mappedBy="gamePlay", fetch=FetchType.EAGER, cascade=CascadeType.REMOVE)
+
     @Fetch(value = FetchMode.SUBSELECT)
     private List<GamePlayer> gamePlayers = new ArrayList<>();
 
-    @OneToMany(mappedBy="game", fetch=FetchType.EAGER)
+    @OneToMany(mappedBy="game", fetch=FetchType.EAGER, cascade=CascadeType.REMOVE)
+
     @Fetch(value = FetchMode.SUBSELECT)
     private List<Score> scores = new ArrayList<>();
 
